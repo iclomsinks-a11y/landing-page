@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GESTARIAN · El Sistema Operativo Inteligente para Talleres Mecánicos y Conductores</title>
+  <meta name="description" content="GESTARIAN transforma la gestión de talleres mecánicos y la experiencia del conductor con IA METIS, escáner OCR, presupuestos digitales y seguimiento en tiempo real.">
+  <meta name="keywords" content="gestarian, software taller mecanico, erp taller automocion, portal cliente taller, metis ai, scanner matricula ocr, presupuestos taller">
+  
+  <!-- Open Graph / Redes Sociales -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.gestarian.com/">
+  <meta property="og:title" content="GESTARIAN · La Revolución Digital en Automoción">
+  <meta property="og:description" content="Software integral para talleres mecánicos modernos y portal conectado para conductores con inteligencia artificial.">
+  <meta property="og:image" content="assets/images/hero-dashboard.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GESTARIAN · Software y Ecosistema Automotriz">
+  <meta name="twitter:description" content="El software para talleres y conductores con IA METIS y portal en vivo.">
+  <meta name="twitter:image" content="assets/images/hero-dashboard.jpg">
+
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2306121E'/><path d='M8 16a8 8 0 1 1 14.9 4.1L18 20a4 4 0 1 0-7.8-2L8 16z' fill='%2338BDF8'/><circle cx='21' cy='11' r='2.5' fill='%2322D3EE'/></svg>">
+
+  <!-- Fuentes Google: Outfit & Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-dark text-slate-100 font-sans selection-cyan">
+
+  <!-- Fondo Ambiental Futurista -->
+  <div class="ambient-glow ambient-glow-top" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow-middle" aria-hidden="true"></div>
+  <div class="ambient-grid-pattern" aria-hidden="true"></div>
+
+  <!-- Header de Navegación -->
+  <header class="site-header" id="site-header">
+    <div class="header-container">
+      <!-- Logotipo -->
+      <a href="#hero" class="brand-logo" id="nav-brand-logo" aria-label="Gestarian Inicio">
+        <div class="logo-icon-box">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+            <path d="m14 9-6 6"/>
+            <path d="M9 9h5v5"/>
+          </svg>
+        </div>
+        <div class="logo-text-group">
+          <span class="logo-title">GESTARIAN</span>
+          <span class="logo-badge">AUTOMOTIVE OS</span>
+        </div>
+      </a>
+
+      <!-- Menú Escritorio -->
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <a href="#versiones" class="nav-link" id="nav-link-versiones">Versiones</a>
+        <a href="#caracteristicas" class="nav-link" id="nav-link-features">Tecnología</a>
+        <a href="#simulador" class="nav-link" id="nav-link-demo">Demo Conductor</a>
+        <a href="#calculadora" class="nav-link" id="nav-link-roi">Calculadora ROI</a>
+        <a href="#precios" class="nav-link" id="nav-link-precios">Planes</a>
+        <a href="#faq" class="nav-link" id="nav-link-faq">Preguntas</a>
+      </nav>
+
+      <!-- Botones de Acción -->
+      <div class="header-actions">
+        <a href="https://pro-gestarian.web.app" target="_blank" rel="noopener noreferrer" class="btn-subtle" id="btn-login-pro" title="Acceso Profesionales">
+          <span class="pulse-dot"></span>
+          Acceso Taller Pro
+        </a>
+        <button type="button" class="btn-primary" id="btn-solicitar-demo" onclick="openDemoModal()">
+          <span>Solicitar Demo</span>
+          <svg class="btn-arrow" viewBox="0 0 16 16" fill="currentColor">
+            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+          </svg>
+        </button>
+        <!-- Botón Menú Móvil -->
+        <button type="button" class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú Desplegable Móvil -->
+    <div class="mobile-drawer" id="mobile-drawer">
+      <nav class="mobile-nav-links">
+        <a href="#versiones" class="mobile-nav-link" onclick="closeMobileMenu()">Versiones y Módulos</a>
+        <a href="#caracteristicas" class="mobile-nav-link" onclick="closeMobileMenu()">Tecnología & Metis IA</a>
+        <a href="#simulador" class="mobile-nav-link" onclick="closeMobileMenu()">Demo Portal Cliente</a>
+        <a href="#calculadora" class="mobile-nav-link" onclick="closeMobileMenu()">Calculadora Rentabilidad</a>
+        <a href="#precios" class="mobile-nav-link" onclick="closeMobileMenu()">Planes y Precios</a>
+        <a href="#faq" class="mobile-nav-link" onclick="closeMobileMenu()">Preguntas Frecuentes</a>
+      </nav>
+      <div class="mobile-drawer-footer">
+        <a href="https://pro-gestarian.web.app" target="_blank" class="btn-subtle w-full text-center">Acceso Taller Pro</a>
+        <button type="button" class="btn-primary w-full text-center mt-3" onclick="closeMobileMenu(); openDemoModal();">Solicitar Demostración</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="hero-container">
+        <!-- Tag / Pill superior -->
+        <div class="hero-pill-badge" id="hero-pill-badge">
+          <span class="pill-sparkle">✨</span>
+          <span class="pill-text">Ecosistema Automotriz 3.0 · Con IA METIS y Portal Conectado</span>
+          <span class="pill-arrow">→</span>
+        </div>
+
+        <!-- TÍTULO INICIAL (Animación de entrada en móvil/tablet portrait con salto y rebote 150px / 20px) -->
+        <h1 class="hero-title" id="hero-title">
+          El Sistema Operativo que Conecta a tu <span class="gradient-text-cyan">Taller</span> con cada <span class="gradient-text-blue">Conductor</span>.
+        </h1>
+
+        <!-- TEXTO INICIAL (Animación idéntica escalonada) -->
+        <p class="hero-subtitle" id="hero-subtitle">
+          Gestión integral de reparaciones, escáner de matrículas por cámara, facturación oficial, inteligencia artificial diagnóstica <strong>METIS</strong> y seguimiento en vivo por WhatsApp para clientes.
+        </p>
+
+        <!-- Botones de Acción Hero -->
+        <div class="hero-cta-group" id="hero-cta-group">
+          <button type="button" class="btn-hero-primary" id="btn-hero-start" onclick="openDemoModal()">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Ver Demo Interactiva</span>
+          </button>
+          <a href="#versiones" class="btn-hero-secondary" id="btn-hero-explore">
+            <span>Explorar Versiones</span>
+            <span class="arrow-down">↓</span>
+          </a>
+        </div>
+
+        <!-- Badges de Confianza / Métricas -->
+        <div class="hero-metrics-bar" id="hero-metrics-bar">
+          <div class="metric-item">
+            <span class="metric-val">+85%</span>
+            <span class="metric-lbl">Aceptación de Presupuestos</span>
+          </div>
+          <div class="metric-separator" aria-hidden="true"></div>
+          <div class="metric-item">
+            <span class="metric-val">3.2 hrs</span>
+            <span class="metric-lbl">Ahorro Diario en Atención</span>
+          </div>
+          <div class="metric-separator" aria-hidden="true"></div>
+          <div class="metric-item">
+            <span class="metric-val">100%</span>
+            <span class="metric-lbl">Transparencia para el Cliente</span>
+          </div>
+          <div class="metric-separator" aria-hidden="true"></div>
+          <div class="metric-item">
+            <span class="metric-val">0 €</span>
+            <span class="metric-lbl">Sin Permanencia de Inicio</span>
+          </div>
+        </div>
+
+        <!-- HERO VISUAL MOCKUP CON GLOW Y REFLEJO -->
+        <div class="hero-media-wrapper" id="hero-media-wrapper">
+          <div class="media-glow-effect" aria-hidden="true"></div>
+          <div class="media-window-frame">
+            <div class="window-header">
+              <div class="window-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <div class="window-url-bar">
+                <span class="lock-icon">🔒</span>
+                <span class="url-text">https://pro.gestarian.com/dashboard/active-repairs</span>
+              </div>
+              <div class="window-status">
+                <span class="live-beacon"></span>
+                <span>METIS IA ONLINE</span>
+              </div>
+            </div>
+            <div class="window-content-img">
+              <img src="assets/images/hero-dashboard.jpg" alt="Panel de Control Gestarian Pro para Taller Automotriz" class="hero-img" loading="eager" fetchpriority="high">
+              <!-- Overlay interactivo con badges flotantes -->
+              <div class="floating-badge badge-top-right">
+                <div class="floating-icon bg-cyan">⚡</div>
+                <div>
+                  <div class="badge-title">OCR Matrícula Activo</div>
+                  <div class="badge-sub">4521-KRT detectada (0.4s)</div>
+                </div>
+              </div>
+              <div class="floating-badge badge-bottom-left">
+                <div class="floating-icon bg-emerald">✓</div>
+                <div>
+                  <div class="badge-title">Presupuesto Aceptado</div>
+                  <div class="badge-sub">Cliente firmó vía WhatsApp</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN DE VERSIONES Y MÓDULOS DEL ECOSISTEMA (Con animación scroll precisa solicitada) -->
+    <section class="section-versions" id="versiones">
+      <div class="content-container">
+        <div class="section-header text-center">
+          <span class="section-tag">ARQUITECTURA MODULAR</span>
+          <h2 class="section-title">Soluciones Diseñadas para cada Eslabón del Sector</h2>
+          <p class="section-desc">
+            Desde la mesa del recepcionista hasta el móvil del conductor, GESTARIAN sincroniza todo en tiempo real.
+          </p>
+        </div>
+
+        <!-- GRID DE LAS TARJETAS DE VERSIONES -->
+        <!-- Cada una lleva la clase 'version-card' para la animación de entrada idéntica al scroll -->
+        <div class="versions-grid" id="versions-cards-container">
+          
+          <!-- TARJETA 1: GESTARIAN PRO (TALLER) -->
+          <article class="version-card" data-version="pro">
+            <div class="card-badge-header">
+              <span class="badge-version bg-cyan-glow">VERSIÓN 1 · TALLER</span>
+              <span class="badge-type">CORE ERP</span>
+            </div>
+            <div class="card-icon-header">
+              <div class="icon-circle cyan">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="card-title">Gestarian Pro</h3>
+                <p class="card-subtitle">Para Talleres Mecánicos y Carrocería</p>
+              </div>
+            </div>
+            <p class="card-description">
+              El centro de mando de tu negocio. Controla recepciones, órdenes de trabajo, citas en calendario, facturación oficial con VeriFactu, cobros pendientes y márgenes por pieza y mano de obra.
+            </p>
+            <ul class="card-features-list">
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Órdenes de Trabajo y Fases:</strong> Asignación a mecánicos en 1 clic.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Facturación Electrónica:</strong> Presupuestos que se convierten en facturas.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Historial por Matrícula:</strong> VIN, ITV, kilometraje y mantenimientos.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Control de Deudas:</strong> Registro de pagos parciales y balances.</span>
+              </li>
+            </ul>
+            <div class="card-footer-action">
+              <a href="https://pro-gestarian.web.app" target="_blank" class="card-btn-primary" id="btn-card-pro">
+                <span>Acceder a Gestarian Pro</span>
+                <span class="btn-icon">→</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- TARJETA 2: GESTARIAN CONNECTED (PORTAL CLIENTE) -->
+          <article class="version-card featured-glow" data-version="connected">
+            <div class="card-badge-header">
+              <span class="badge-version bg-blue-glow">VERSIÓN 2 · CONDUCTOR</span>
+              <span class="badge-popular">ALTA FIDELIZACIÓN</span>
+            </div>
+            <div class="card-icon-header">
+              <div class="icon-circle blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                  <line x1="12" y1="18" x2="12.01" y2="18"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="card-title">Gestarian Connected</h3>
+                <p class="card-subtitle">Portal Oficial del Cliente y Conductor</p>
+              </div>
+            </div>
+            <p class="card-description">
+              Tus clientes no tienen que llamar para preguntar "¿Cómo va mi coche?". Acceden con su DNI o matrícula a un portal exclusivo con tu marca para ver avances, fotos y aprobar presupuestos.
+            </p>
+            <ul class="card-features-list">
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Seguimiento en Vivo:</strong> Desde recepción hasta lavado y entrega.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Aprobación Digital:</strong> Acepta o rechaza partidas con total claridad.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Propuesta de Recogida:</strong> Calendario bilateral de citas y entrega.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Descarga de Facturas y PDF:</strong> Todo su historial en el móvil.</span>
+              </li>
+            </ul>
+            <div class="card-footer-action">
+              <a href="#simulador" class="card-btn-accent" id="btn-card-connected">
+                <span>Probar Portal Conductor</span>
+                <span class="btn-icon">→</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- TARJETA 3: GESTARIAN METIS AI (INTELIGENCIA ARTIFICIAL) -->
+          <article class="version-card" data-version="metis">
+            <div class="card-badge-header">
+              <span class="badge-version bg-purple-glow">VERSIÓN 3 · ASISTENTE IA</span>
+              <span class="badge-type">ALGORÍTMICO</span>
+            </div>
+            <div class="card-icon-header">
+              <div class="icon-circle purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="card-title">Gestarian METIS</h3>
+                <p class="card-subtitle">Inteligencia Artificial y Escáner OCR</p>
+              </div>
+            </div>
+            <p class="card-description">
+              El copiloto técnico en el taller. Apunta la cámara al permiso de circulación o matrícula y METIS extrae marca, modelo, VIN y caducidad ITV automáticamente. Diagnósticos rápidos por voz.
+            </p>
+            <ul class="card-features-list">
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Escáner OCR Ultrarrápido:</strong> Digitaliza fichas técnicas en 0.5 seg.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Asistente por Voz:</strong> Dictado de notas de avería en el elevador.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Detección de Códigos DTC:</strong> Sugerencias de causas y despiece.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Automatización WhatsApp:</strong> Redacción inteligente de avisos al cliente.</span>
+              </li>
+            </ul>
+            <div class="card-footer-action">
+              <button type="button" class="card-btn-primary" onclick="openMetisModal()" id="btn-card-metis">
+                <span>Conocer METIS AI</span>
+                <span class="btn-icon">→</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- TARJETA 4: GESTARIAN ENTERPRISE (REDES Y CONCESIONARIOS) -->
+          <article class="version-card" data-version="enterprise">
+            <div class="card-badge-header">
+              <span class="badge-version bg-emerald-glow">VERSIÓN 4 · FLOTAS Y REDES</span>
+              <span class="badge-type">MULTI-SEDE</span>
+            </div>
+            <div class="card-icon-header">
+              <div class="icon-circle emerald">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                  <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="card-title">Gestarian Enterprise</h3>
+                <p class="card-subtitle">Para Redes de Talleres y Grandes Flotas</p>
+              </div>
+            </div>
+            <p class="card-description">
+              Gestión centralizada para cadenas de talleres mecánicos, concesionarios oficiales, flotas de renting y empresas de transporte con múltiples ubicaciones y analítica consolidada.
+            </p>
+            <ul class="card-features-list">
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Multi-Taller Unificado:</strong> Comparativas de rendimiento y facturación.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>API REST y Webhooks:</strong> Integración con software contable y ERPs.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>Roles y Permisos Granulares:</strong> Mecánicos, jefes de taller y auditores.</span>
+              </li>
+              <li>
+                <span class="check-icon">✓</span>
+                <span><strong>SLA 99.9% y Soporte 24/7:</strong> Gestor de cuenta dedicado y backups.</span>
+              </li>
+            </ul>
+            <div class="card-footer-action">
+              <button type="button" class="card-btn-primary" onclick="openDemoModal('enterprise')" id="btn-card-enterprise">
+                <span>Contactar con Ventas</span>
+                <span class="btn-icon">→</span>
+              </button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN INTERACTIVA: SIMULADOR DEL PORTAL DEL CLIENTE (EXPERIENCIA EN VIVO) -->
+    <section class="section-simulator" id="simulador">
+      <div class="content-container">
+        <div class="simulator-layout">
+          <!-- Columna Izquierda: Explicación -->
+          <div class="simulator-info">
+            <span class="section-tag">PRUEBA EN VIVO</span>
+            <h2 class="section-title">El Portal del Conductor: Tu Mejor Herramienta de Cierre</h2>
+            <p class="section-desc">
+              Experimenta lo que siente tu cliente cuando deja su vehículo en tu taller. Prueba a ingresar una matrícula o selecciona un vehículo de muestra para simular el seguimiento interactivo.
+            </p>
+
+            <div class="simulator-controls-box">
+              <label for="plate-input-field" class="input-label">Ingresa una matrícula de prueba:</label>
+              <div class="plate-search-group">
+                <input type="text" id="plate-input-field" value="4521-KRT" placeholder="Ej: 1234-XYZ" class="plate-input" maxlength="10">
+                <button type="button" class="btn-plate-lookup" id="btn-plate-lookup" onclick="lookupSimulatedPlate()">Consultar</button>
+              </div>
+
+              <!-- Matrículas de ejemplo -->
+              <div class="sample-plates-chips">
+                <span class="chips-label">Prueba rápida:</span>
+                <button type="button" class="chip-btn" onclick="setSimulatedPlate('4521-KRT')">4521-KRT (En Reparación)</button>
+                <button type="button" class="chip-btn" onclick="setSimulatedPlate('8812-MNP')">8812-MNP (Listo para Entrega)</button>
+                <button type="button" class="chip-btn" onclick="setSimulatedPlate('0194-LVC')">0194-LVC (Presupuesto Pendiente)</button>
+              </div>
+            </div>
+
+            <div class="feature-bullets-grid">
+              <div class="bullet-item">
+                <div class="bullet-icon">📱</div>
+                <div>
+                  <h4>Sin descargas de App</h4>
+                  <p>Acceso instantáneo mediante enlace directo o código QR en el resguardo.</p>
+                </div>
+              </div>
+              <div class="bullet-item">
+                <div class="bullet-icon">🔔</div>
+                <div>
+                  <h4>Notificaciones WhatsApp</h4>
+                  <p>Avisos automáticos cuando el coche cambia de estado o requiere aprobación.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Mockup Interactivo del Teléfono -->
+          <div class="simulator-phone-wrapper">
+            <div class="phone-device-mockup">
+              <!-- Barra de estado del móvil -->
+              <div class="phone-notch"></div>
+              <div class="phone-screen" id="phone-screen-portal">
+                
+                <!-- Encabezado del Portal Conductor -->
+                <div class="portal-mobile-header">
+                  <div class="portal-workshop-brand">
+                    <div class="portal-logo-mini">🔧</div>
+                    <div>
+                      <span class="portal-brand-sub">Portal Oficial del Conductor</span>
+                      <h4 class="portal-brand-title" id="sim-workshop-name">Taller Automotriz DM CAR</h4>
+                    </div>
+                  </div>
+                  <span class="portal-live-status">CONECTADO</span>
+                </div>
+
+                <!-- Tarjeta del Vehículo -->
+                <div class="portal-car-card">
+                  <div class="car-card-top">
+                    <div>
+                      <span class="car-badge-plate" id="sim-vehicle-plate">4521-KRT</span>
+                      <h5 class="car-model-name" id="sim-vehicle-model">SEAT León 2.0 TDI (2021)</h5>
+                    </div>
+                    <span class="badge-status-pill status-active" id="sim-status-pill">Fase 3: Reparación</span>
+                  </div>
+
+                  <!-- Stepper de Fases -->
+                  <div class="stepper-progress-box">
+                    <div class="stepper-labels">
+                      <span class="step-lbl active">Recepción</span>
+                      <span class="step-lbl active">Diagnóstico</span>
+                      <span class="step-lbl current" id="sim-step-3-lbl">En Taller</span>
+                      <span class="step-lbl" id="sim-step-4-lbl">Entrega</span>
+                    </div>
+                    <div class="stepper-bar-bg">
+                      <div class="stepper-bar-fill" id="sim-stepper-fill" style="width: 70%;"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Trabajos y Presupuesto Interactivo -->
+                <div class="portal-budget-box">
+                  <div class="budget-header">
+                    <span>Expediente #EXP-2026-089</span>
+                    <strong class="budget-total" id="sim-budget-amount">458,50 €</strong>
+                  </div>
+                  <div class="budget-items-list" id="sim-budget-items">
+                    <div class="budget-row">
+                      <span>1. Pastillas de Freno Brembo Delanteras</span>
+                      <strong>145,00 €</strong>
+                    </div>
+                    <div class="budget-row">
+                      <span>2. Aceite Castrol Edge 5W30 + Filtros</span>
+                      <strong>118,50 €</strong>
+                    </div>
+                    <div class="budget-row highlight-row">
+                      <span>3. Sustitución Líquido de Frenos DOT 4</span>
+                      <strong>55,00 €</strong>
+                    </div>
+                    <div class="budget-row">
+                      <span>4. Mano de Obra Cualificada (2.5h)</span>
+                      <strong>140,00 €</strong>
+                    </div>
+                  </div>
+
+                  <!-- Botón de Acción Interactiva -->
+                  <div class="budget-action-wrap">
+                    <button type="button" class="btn-approve-quote" id="btn-approve-sim" onclick="approveSimulatedBudget()">
+                      <span id="btn-approve-text">✓ Aceptar Presupuesto en 1 Clic</span>
+                    </button>
+                    <p class="budget-hint" id="sim-approval-hint">Firma digital instantánea comunicada a los mecánicos.</p>
+                  </div>
+                </div>
+
+                <!-- Footer del Portal Simulado -->
+                <div class="portal-mobile-footer">
+                  <span>Tel. Taller: 912 345 678</span>
+                  <span>Ubicación: Pol. Industrial 12</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN TECNOLOGÍA METIS AI & INNOVACIÓN -->
+    <section class="section-tech" id="caracteristicas">
+      <div class="content-container">
+        <div class="tech-grid-split">
+          <!-- Columna Visual con Mockup de METIS AI -->
+          <div class="tech-visual-card">
+            <div class="tech-img-box">
+              <img src="assets/images/metis-ai.jpg" alt="METIS Asistente IA para Taller Automotriz" class="tech-img" loading="lazy">
+              <div class="tech-hud-badge">
+                <span class="hud-pulse"></span>
+                <span>ALGORITMO METIS v3.14 · RED NEURONAL AUTOMOTRIZ</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Explicativa -->
+          <div class="tech-content-column">
+            <span class="section-tag">TECNOLOGÍA REVOLUCIONARIA</span>
+            <h2 class="section-title">METIS: El Copiloto con Inteligencia Artificial que Multiplica tu Taller</h2>
+            <p class="section-desc">
+              Diseñado exclusivamente para el sector automotriz. METIS comprende lenguaje mecánico, traduce fallas complejas a términos que el cliente entiende y agiliza el papeleo repetitivo.
+            </p>
+
+            <div class="tech-perks-list">
+              <div class="perk-box">
+                <div class="perk-number">01</div>
+                <div>
+                  <h4>Lectura Óptica OCR de Fichas y Permisos</h4>
+                  <p>Escanea con cualquier tablet o teléfono el permiso de circulación. Registra en 1 segundo marca, modelo, código motor, bastidor (VIN) y fecha de ITV.</p>
+                </div>
+              </div>
+              <div class="perk-box">
+                <div class="perk-number">02</div>
+                <div>
+                  <h4>Dictado de Averías Manos Libres</h4>
+                  <p>Bajo el elevador con las manos ocupadas, dicta las piezas necesarias y las horas estimadas. METIS estructura la orden de trabajo sin tocar el teclado.</p>
+                </div>
+              </div>
+              <div class="perk-box">
+                <div class="perk-number">03</div>
+                <div>
+                  <h4>Generador de Explicaciones para el Cliente</h4>
+                  <p>Convierte un código crudo como "P0300 Misfire cilindro 2" en un mensaje claro y transparente para enviar al cliente por WhatsApp con fotos adjuntas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN CALCULADORA DE RENTABILIDAD & AHORRO (ROI) -->
+    <section class="section-calculator" id="calculadora">
+      <div class="content-container">
+        <div class="calculator-card-wrapper">
+          <div class="calc-header text-center">
+            <span class="section-tag">CALCULADORA DE RENTABILIDAD</span>
+            <h2 class="section-title">Calcula cuánto Ganará y Ahorrará tu Taller con GESTARIAN</h2>
+            <p class="section-desc">
+              Mueve los deslizadores con los datos reales de tu taller y descubre el impacto económico mensual.
+            </p>
+          </div>
+
+          <div class="calc-body-grid">
+            <!-- Deslizadores -->
+            <div class="calc-sliders-column">
+              <div class="slider-group">
+                <div class="slider-header">
+                  <label for="slider-cars" class="slider-label">Vehículos reparados al mes:</label>
+                  <span class="slider-display" id="val-cars-display">80 coches</span>
+                </div>
+                <input type="range" id="slider-cars" min="15" max="350" step="5" value="80" class="styled-range" oninput="updateCalculations()">
+                <div class="range-limits">
+                  <span>15 coches</span>
+                  <span>350 coches/mes</span>
+                </div>
+              </div>
+
+              <div class="slider-group mt-6">
+                <div class="slider-header">
+                  <label for="slider-ticket" class="slider-label">Ticket medio de reparación (€):</label>
+                  <span class="slider-display" id="val-ticket-display">340 €</span>
+                </div>
+                <input type="range" id="slider-ticket" min="100" max="1500" step="20" value="340" class="styled-range" oninput="updateCalculations()">
+                <div class="range-limits">
+                  <span>100 €</span>
+                  <span>1.500 €</span>
+                </div>
+              </div>
+
+              <div class="calc-info-note">
+                <span class="info-icon">💡</span>
+                <span>Basado en un aumento promedio del <strong>22% en aceptación de ampliaciones de presupuesto</strong> gracias a la aprobación visual por WhatsApp y <strong>3.5 minutos ahorrados por llamada</strong> evitada.</span>
+              </div>
+            </div>
+
+            <!-- Resultados en Vivo -->
+            <div class="calc-results-column">
+              <div class="result-highlight-card">
+                <span class="res-sub">Facturación Adicional Estimada</span>
+                <div class="res-main-amount" id="res-extra-revenue">+2.992 €</div>
+                <span class="res-period">al mes por presupuestos aprobados más rápido</span>
+              </div>
+
+              <div class="results-duo-grid">
+                <div class="res-mini-card">
+                  <span class="mini-lbl">Horas de llamada ahorradas:</span>
+                  <div class="mini-val" id="res-hours-saved">46 hrs/mes</div>
+                  <span class="mini-sub">Más tiempo de mano de obra productiva</span>
+                </div>
+                <div class="res-mini-card">
+                  <span class="mini-lbl">Retorno de inversión (ROI):</span>
+                  <div class="mini-val text-cyan" id="res-roi-mult">42x</div>
+                  <span class="mini-sub">Respecto al coste de la licencia</span>
+                </div>
+              </div>
+
+              <button type="button" class="btn-primary w-full mt-4" onclick="openDemoModal()">
+                <span>Comenzar a Rentabilizar mi Taller</span>
+                <span class="btn-arrow">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN DE PLANES Y TARIFAS -->
+    <section class="section-pricing" id="precios">
+      <div class="content-container">
+        <div class="section-header text-center">
+          <span class="section-tag">TARIFAS TRANSPARENTES</span>
+          <h2 class="section-title">Planes Adaptados a la Dimensión de tu Taller</h2>
+          <p class="section-desc">
+            Sin costes ocultos, sin comisiones por factura y con soporte técnico en español.
+          </p>
+
+          <!-- Conmutador Mensual / Anual -->
+          <div class="pricing-toggle-wrap">
+            <span class="toggle-lbl" id="lbl-monthly">Facturación Mensual</span>
+            <button type="button" class="pricing-switch" id="pricing-switch" onclick="togglePricingPeriod()" aria-label="Cambiar a facturación anual">
+              <span class="switch-handle" id="switch-handle"></span>
+            </button>
+            <span class="toggle-lbl" id="lbl-annual">Facturación Anual</span>
+            <span class="save-badge">Ahorra 20%</span>
+          </div>
+        </div>
+
+        <div class="pricing-cards-grid">
+          <!-- PLAN 1: STARTER -->
+          <div class="pricing-card" data-tier="starter">
+            <div class="price-header">
+              <h3 class="tier-name">Taller Básico</h3>
+              <p class="tier-for">Para mecánicos autónomos e independientes.</p>
+              <div class="price-box">
+                <span class="price-val" data-monthly="39" data-annual="29">39€</span>
+                <span class="price-period">/ mes</span>
+              </div>
+              <span class="price-billed-note" data-annual-note="Facturado anualmente (348€/año)">Sin permanencia</span>
+            </div>
+            <ul class="pricing-perks">
+              <li>✓ Hasta 100 vehículos activos/mes</li>
+              <li>✓ Recepción y Fichas por Matrícula</li>
+              <li>✓ Presupuestos y Facturas Oficiales</li>
+              <li>✓ Portal Cliente Básico (Enlace Web)</li>
+              <li>✓ 1 Usuario Administrador</li>
+              <li>✓ Soporte por Email en 24h</li>
+            </ul>
+            <button type="button" class="btn-tier-select" onclick="openDemoModal('starter')">Empezar Prueba Gratis</button>
+          </div>
+
+          <!-- PLAN 2: PRO (DESTACADO) -->
+          <div class="pricing-card popular-tier" data-tier="pro">
+            <div class="tier-popular-tag">MÁS POPULAR · TALLER EN CRECIMIENTO</div>
+            <div class="price-header">
+              <h3 class="tier-name">Gestarian Pro</h3>
+              <p class="tier-for">Para talleres de 2 a 8 elevadores que buscan máxima eficiencia.</p>
+              <div class="price-box">
+                <span class="price-val" data-monthly="79" data-annual="59">79€</span>
+                <span class="price-period">/ mes</span>
+              </div>
+              <span class="price-billed-note" data-annual-note="Facturado anualmente (708€/año)">Sin permanencia</span>
+            </div>
+            <ul class="pricing-perks">
+              <li>✓ <strong>Vehículos y Órdenes Ilimitadas</strong></li>
+              <li>✓ <strong>METIS AI:</strong> Escáner OCR y Diagnóstico</li>
+              <li>✓ <strong>Portal del Conductor Personalizado</strong> con tu logo</li>
+              <li>✓ <strong>Notificaciones automáticas por WhatsApp</strong></li>
+              <li>✓ Control de Cobros y Balances</li>
+              <li>✓ Hasta 5 Usuarios y Mecánicos</li>
+              <li>✓ Soporte Prioritario WhatsApp y Teléfono</li>
+            </ul>
+            <button type="button" class="btn-tier-popular" onclick="openDemoModal('pro')">Probar Gestarian Pro Gratis (15 días)</button>
+          </div>
+
+          <!-- PLAN 3: ENTERPRISE -->
+          <div class="pricing-card" data-tier="enterprise">
+            <div class="price-header">
+              <h3 class="tier-name">Redes & Flotas</h3>
+              <p class="tier-for">Para cadenas, franquicias, concesionarios y flotas corporativas.</p>
+              <div class="price-box">
+                <span class="price-val" data-monthly="149" data-annual="119">149€</span>
+                <span class="price-period">/ mes</span>
+              </div>
+              <span class="price-billed-note" data-annual-note="Facturado anualmente (1.428€/año)">A medida</span>
+            </div>
+            <ul class="pricing-perks">
+              <li>✓ <strong>Multi-Sede y Multi-Taller</strong> unificado</li>
+              <li>✓ Usuarios y mecánicos ilimitados</li>
+              <li>✓ API abierta & Integraciones ERP / DMS</li>
+              <li>✓ Dominio personalizado (clientes.tutaller.com)</li>
+              <li>✓ Informes consolidados de rentabilidad</li>
+              <li>✓ Gestor de cuenta dedicado y migración de datos</li>
+            </ul>
+            <button type="button" class="btn-tier-select" onclick="openDemoModal('enterprise')">Hablar con Asesor</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN DE TESTIMONIOS Y CONFIANZA -->
+    <section class="section-testimonials">
+      <div class="content-container">
+        <div class="section-header text-center">
+          <span class="section-tag">CASOS DE ÉXITO</span>
+          <h2 class="section-title">Talleres Reales que ya Operan en el Siglo XXI</h2>
+        </div>
+
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="test-stars">★★★★★</div>
+            <p class="test-quote">
+              "Antes perdíamos 2 horas al día al teléfono con clientes preguntando por su coche. Con el portal de Gestarian ven las fotos de los frenos desgastados y aprueban el cambio al instante. Hemos subido la facturación un 28%."
+            </p>
+            <div class="test-author">
+              <div class="author-avatar">DM</div>
+              <div>
+                <strong class="author-name">David Martínez</strong>
+                <span class="author-role">Gerente en Talleres DM CAR · 4 Elevadores</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="test-stars">★★★★★</div>
+            <p class="test-quote">
+              "El escáner OCR de permisos con METIS es magia pura. El cliente llega, le saco una foto al papel con el móvil y ya tengo el modelo exacto, bastidor y datos de contacto creados en el ordenador. No vuelvo a teclear un VIN a mano en mi vida."
+            </p>
+            <div class="test-author">
+              <div class="author-avatar bg-blue">CR</div>
+              <div>
+                <strong class="author-name">Carlos Rodríguez</strong>
+                <span class="author-role">Jefe de Taller en Electromecánica RC</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="test-stars">★★★★★</div>
+            <p class="test-quote">
+              "La adaptación a la facturación electrónica fue instantánea. Lo mejor es que la aplicación es ultrarrápida, no se cuelga y los mecánicos la usan en sus tablets sin necesidad de cursillos complicados."
+            </p>
+            <div class="test-author">
+              <div class="author-avatar bg-purple">LA</div>
+              <div>
+                <strong class="author-name">Laura Alarcón</strong>
+                <span class="author-role">Responsable de Administración en AutoChapa Norte</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN PREGUNTAS FRECUENTES (FAQ) -->
+    <section class="section-faq" id="faq">
+      <div class="content-container narrow">
+        <div class="section-header text-center">
+          <span class="section-tag">RESOLVEMOS TUS DUDAS</span>
+          <h2 class="section-title">Preguntas Frecuentes</h2>
+        </div>
+
+        <div class="faq-accordion-list">
+          <details class="faq-item" open>
+            <summary class="faq-question">
+              <span>¿Necesito instalar algún programa en los ordenadores de mi taller?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>No. GESTARIAN es 100% cloud y multiplataforma. Puedes acceder desde cualquier ordenador con Windows o Mac, tablets iPad/Android y teléfonos móviles mediante tu navegador web habitual. Tus datos están siempre respaldados en la nube con copias de seguridad continuas.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>¿Mis clientes tienen que pagar o instalarse alguna App para ver el portal?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Rotundamente no. Es completamente gratuito e inmediato para tus clientes. Solo reciben un mensaje de WhatsApp o SMS con un enlace seguro a tu portal web adaptado a móviles. Entran con su matrícula y DNI en 1 segundo sin descargar nada de la App Store ni Play Store.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>¿Puedo importar los clientes y vehículos que ya tengo en mi software actual?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Sí. Disponemos de herramientas de importación masiva por Excel / CSV y nuestro equipo técnico te asiste gratuitamente en la migración de tu base de datos de clientes y vehículos para que no pierdas ni un solo registro histórico.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>¿Está preparado para la normativa de Facturación Electrónica y VeriFactu?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Sí, GESTARIAN está adaptado a los requisitos técnicos de la Ley Antifraude y el reglamento VeriFactu en España, garantizando la inalterabilidad de los registros, trazabilidad y emisión de códigos QR y hashes reglamentarios.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>¿Hay permanencia obligatoria o penalización por cancelar?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Cero permanencia. Si eliges el plan mensual puedes cancelar en cualquier momento con un solo clic desde tu panel sin penalizaciones ni preguntas. Además, ofrecemos 15 días de prueba completa sin compromiso.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANNER FINAL CTA -->
+    <section class="section-final-cta">
+      <div class="content-container">
+        <div class="final-cta-card">
+          <div class="cta-glow-bg" aria-hidden="true"></div>
+          <div class="cta-content text-center">
+            <span class="pill-sparkle">🚀 EMPIEZA HOY MISMO</span>
+            <h2 class="cta-title">Moderniza tu Taller Mecánico en Menos de 10 Minutos</h2>
+            <p class="cta-desc">
+              Únete a la nueva generación de talleres que trabajan con transparencia, mayor rentabilidad y clientes satisfechos.
+            </p>
+            <div class="cta-buttons-wrap">
+              <button type="button" class="btn-hero-primary" onclick="openDemoModal()">Solicitar Demostración Guiada</button>
+              <a href="https://pro-gestarian.web.app" target="_blank" class="btn-hero-secondary">Entrar a Gestarian Pro</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PIE DE PÁGINA (FOOTER) -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-top-grid">
+        <div class="footer-brand-col">
+          <div class="brand-logo footer-logo">
+            <div class="logo-icon-box">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                <path d="m14 9-6 6"/>
+                <path d="M9 9h5v5"/>
+              </svg>
+            </div>
+            <span class="logo-title">GESTARIAN</span>
+          </div>
+          <p class="footer-slogan">
+            El ecosistema de software y conectividad que une a talleres de automoción y conductores en una única plataforma transparente.
+          </p>
+          <div class="footer-contact-info">
+            <p>📧 contacto@gestarian.com</p>
+            <p>🌐 www.gestarian.com</p>
+          </div>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Ecosistema</h4>
+          <ul>
+            <li><a href="#versiones">Gestarian Pro</a></li>
+            <li><a href="#simulador">Gestarian Connected</a></li>
+            <li><a href="#caracteristicas">METIS IA Automotriz</a></li>
+            <li><a href="#versiones">Gestarian Enterprise</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Soluciones</h4>
+          <ul>
+            <li><a href="#simulador">Seguimiento en Vivo</a></li>
+            <li><a href="#caracteristicas">Escáner OCR Matrículas</a></li>
+            <li><a href="#calculadora">Calculadora de ROI</a></li>
+            <li><a href="#precios">Precios y Tarifas</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Acceso y Enlaces</h4>
+          <ul>
+            <li><a href="https://pro-gestarian.web.app" target="_blank" rel="noopener">Portal del Taller (Pro)</a></li>
+            <li><a href="#simulador">Portal del Conductor</a></li>
+            <li><a href="#faq">Centro de Ayuda</a></li>
+            <li><a href="javascript:void(0)" onclick="openDemoModal()">Agendar Formación</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <p class="copyright-text">
+          © 2026 GESTARIAN AUTOMOTIVE SOLUTIONS S.L. Todos los derechos reservados.
+        </p>
+        <div class="legal-links">
+          <a href="#">Aviso Legal</a>
+          <a href="#">Política de Privacidad</a>
+          <a href="#">Política de Cookies</a>
+          <a href="#">Seguridad Cloud</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL INTERACTIVO DE SOLICITUD DE DEMO / ACCESO ANTICIPADO -->
+  <dialog class="modal-dialog" id="demo-modal" aria-labelledby="modal-title">
+    <div class="modal-overlay" onclick="closeDemoModal()"></div>
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" onclick="closeDemoModal()" aria-label="Cerrar modal">&times;</button>
+      
+      <div class="modal-header">
+        <span class="badge-version bg-cyan-glow">DEMO PERSONALIZADA</span>
+        <h3 class="modal-title" id="modal-title">Solicita tu Demostración de GESTARIAN</h3>
+        <p class="modal-sub">Descubre en 15 minutos cómo duplicar la tasa de aprobación de presupuestos y ahorrar horas al teléfono.</p>
+      </div>
+
+      <form id="demo-lead-form" onsubmit="handleLeadSubmit(event)">
+        <div class="form-group">
+          <label for="lead-name">Nombre y Apellidos *</label>
+          <input type="text" id="lead-name" required placeholder="Ej: Marcos García" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="lead-workshop">Nombre de tu Taller o Empresa *</label>
+          <input type="text" id="lead-workshop" required placeholder="Ej: Talleres Mecánicos García" class="form-input">
+        </div>
+
+        <div class="form-row-duo">
+          <div class="form-group">
+            <label for="lead-email">Correo Electrónico *</label>
+            <input type="email" id="lead-email" required placeholder="marcos@tallergarcia.es" class="form-input">
+          </div>
+          <div class="form-group">
+            <label for="lead-phone">Teléfono / WhatsApp *</label>
+            <input type="tel" id="lead-phone" required placeholder="612 345 678" class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lead-elevators">Número aproximado de elevadores / mecánicos:</label>
+          <select id="lead-elevators" class="form-input select-styled">
+            <option value="1">1 - 2 Elevadores (Taller independiente)</option>
+            <option value="3-5" selected>3 - 5 Elevadores (Taller mediano)</option>
+            <option value="6-10">6 - 10 Elevadores (Gran taller)</option>
+            <option value="more">Más de 10 / Red multisede</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3 mt-2" id="btn-submit-lead">
+          <span>Confirmar y Acceder a la Prueba</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </form>
+
+      <div class="modal-success-screen hidden" id="modal-success-screen">
+        <div class="success-icon-box">✓</div>
+        <h4>¡Solicitud Recibida con Éxito!</h4>
+        <p>Un especialista automotriz de Gestarian se pondrá en contacto contigo en tu teléfono o WhatsApp para darte acceso preferente.</p>
+        <button type="button" class="btn-primary mt-4" onclick="closeDemoModal()">Volver a la Página</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- TOAST DE NOTIFICACIÓN FLOTANTE -->
+  <div class="toast-notification hidden" id="toast-notification" role="status" aria-live="polite">
+    <div class="toast-icon" id="toast-icon">✓</div>
+    <div class="toast-body">
+      <div class="toast-title" id="toast-title">Notificación</div>
+      <div class="toast-msg" id="toast-msg">Mensaje de confirmación</div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
