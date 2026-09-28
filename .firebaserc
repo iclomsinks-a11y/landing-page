@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "gestarian2"
+  },
+  "targets": {
+    "gestarian2": {
+      "hosting": {
+        "clientes": [
+          "clientes-gestarian"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

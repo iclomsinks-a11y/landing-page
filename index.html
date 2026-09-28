@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>GESTARIAN - Ecosistema de Software</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      /* Card Colors */
+      --c-quick: #f97316;    /* Orange */
+      --c-lite: #22c55e;     /* Green */
+      --c-pro: #a855f7;      /* Purple */
+      --c-ent: #64748b;      /* Slate / Gray-Purple */
+      
+      --card-bg: #111827;
+      --card-border: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto; /* Habilitado el scroll para evitar cortes por las tarjetas gigantes */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 4rem;
+      background: transparent;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-client {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: background 0.2s, color 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .btn-client:hover {
+      background: white;
+      color: black;
+    }
+
+    /* Main Area */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      max-width: 1800px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: clamp(2rem, 5vh, 4rem);
+      max-width: 1400px;
+    }
+
+    /* Textos Hero Escalados a x1.5 para PC */
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.9rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero p {
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Pricing Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2.5rem;
+      width: 100%;
+      align-items: stretch;
+      padding-bottom: 4rem;
+    }
+
+    /* Tarjetas y Contenidos Escalados a x2 para PC */
+    .card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 24px;
+      padding: clamp(1.8rem, 3vw, 3.6rem);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    /* Card Themes */
+    .card.quick { --theme-color: var(--c-quick); }
+    .card.lite { --theme-color: var(--c-lite); }
+    .card.pro { --theme-color: var(--c-pro); }
+    .card.ent { --theme-color: var(--c-ent); }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 45px -15px var(--theme-color);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Highlighted Pro Card */
+    .card.pro {
+      transform: scale(1.05);
+      border: 3px solid var(--theme-color);
+      background: #151025;
+      box-shadow: 0 0 35px -15px var(--theme-color);
+      z-index: 10;
+    }
+    
+    .card.pro:hover {
+      transform: scale(1.05) translateY(-8px);
+      box-shadow: 0 20px 50px -15px var(--theme-color);
+    }
+
+    .badge {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--theme-color);
+      color: white;
+      padding: 0.4rem 1.2rem;
+      border-radius: 9999px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-title {
+      font-size: 2.7rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: var(--text-main);
+    }
+
+    .card-divider {
+      height: 2px;
+      background: var(--card-border);
+      margin: 1.5rem 0 2rem 0;
+      width: 100%;
+    }
+
+    .card-features {
+      list-style: none;
+      flex: 1;
+      margin-bottom: 2.5rem;
+    }
+
+    .card-features li {
+      font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: flex-start;
+      line-height: 1.4;
+    }
+
+    .card-features li svg {
+      width: 28px;
+      height: 28px;
+      margin-right: 0.8rem;
+      color: var(--theme-color);
+      flex-shrink: 0;
+      margin-top: 4px;
+      stroke-width: 3.5;
+    }
+
+    .card-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 1.5rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-weight: 600;
+      font-size: 1.9rem;
+      transition: background 0.2s, border-color 0.2s;
+      border: 2px solid rgba(255,255,255,0.1);
+      margin-top: auto;
+    }
+
+    .card:hover .card-btn {
+      background: var(--theme-color);
+      border-color: var(--theme-color);
+    }
+    
+    .card.pro .card-btn {
+      background: var(--theme-color);
+      border-color: var(--theme-color);
+    }
+
+    /* Responsive fallbacks */
+    @media (max-width: 1600px) {
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+      .card.pro { transform: none; border-width: 2px; }
+      .card.pro:hover { transform: translateY(-8px); }
+      header { padding: 1.5rem 2rem; }
+    }
+    
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.2rem; }
+      .hero p { font-size: 1.2rem; }
+      .card-title { font-size: 2rem; }
+      .card-features li { font-size: 1.2rem; }
+      .card-btn { font-size: 1.4rem; padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="logo">GESTARIAN</a>
+    <a href="https://clientes-gestarian.web.app" class="btn-client" target="_blank" rel="noopener noreferrer">Área de Clientes</a>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Gestión documental automatizada y asistida por IA para profesionales independientes y empresas.</h1>
+      <p>Toda la gestión con acceso inmediato en tiempo real en tu bolsillo.</p>
+    </div>
+
+    <div class="grid">
+      
+      <!-- Quick -->
+      <a href="https://quick-gestarian.web.app" class="card quick" target="_blank" rel="noopener noreferrer">
+        <h2 class="card-title">Quick</h2>
+        <div class="card-divider"></div>
+        <ul class="card-features">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Facturación ultra rápida
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Envíos automáticos por WhatsApp/Email
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            100% móvil
+          </li>
+        </ul>
+        <div class="card-btn">Acceder</div>
+      </a>
+
+      <!-- Lite -->
+      <a href="https://lite-gestarian.web.app" class="card lite" target="_blank" rel="noopener noreferrer">
+        <h2 class="card-title">Lite</h2>
+        <div class="card-divider"></div>
+        <ul class="card-features">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Control de caja
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Presupuestos rápidos
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Gestión de clientes
+          </li>
+        </ul>
+        <div class="card-btn">Acceder</div>
+      </a>
+
+      <!-- Pro -->
+      <a href="https://pro-gestarian.web.app" class="card pro" target="_blank" rel="noopener noreferrer">
+        <div class="badge">Recomendado</div>
+        <h2 class="card-title">Pro</h2>
+        <div class="card-divider"></div>
+        <ul class="card-features">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Escaneo OCR con IA
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Extracción de datos inteligente
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Informes para gestoría
+          </li>
+        </ul>
+        <div class="card-btn">Acceder</div>
+      </a>
+
+      <!-- Enterprise -->
+      <a href="https://enterprise-gestarian.web.app" class="card ent" target="_blank" rel="noopener noreferrer">
+        <h2 class="card-title">Enterprise</h2>
+        <div class="card-divider"></div>
+        <ul class="card-features">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Entorno multi-empresa
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Roles y permisos avanzados
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Analítica a medida
+          </li>
+        </ul>
+        <div class="card-btn">Acceder</div>
+      </a>
+
+    </div>
+  </main>
+
+</body>
+</html>
