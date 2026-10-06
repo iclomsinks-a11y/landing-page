@@ -3,24 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>GESTARIAN - Ecosistema de Software</title>
+  <title>GESTARIAN - Ecosistema de Gestión Documental e Inteligencia Artificial</title>
+  <meta name="description" content="Gestión documental automatizada y asistida por IA para profesionales independientes y empresas. Facturación ultra rápida, OCR con IA y entornos multi-empresa.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --bg-dark: #0a0e17;
+      --card-bg: #111827;
+      --card-border: #1f2937;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       
-      /* Card Colors */
+      /* Card Theme Colors */
       --c-quick: #f97316;    /* Orange */
       --c-lite: #22c55e;     /* Green */
       --c-pro: #a855f7;      /* Purple */
-      --c-ent: #64748b;      /* Slate / Gray-Purple */
-      
-      --card-bg: #111827;
-      --card-border: #1f2937;
+      --c-ent: #38bdf8;      /* Sky Blue */
+
+      --accent-glow: rgba(168, 85, 247, 0.15);
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     * {
@@ -29,15 +36,19 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-family);
       background-color: var(--bg-dark);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
-      overflow-y: auto; /* Habilitado el scroll para evitar cortes por las tarjetas gigantes */
       display: flex;
       flex-direction: column;
+      line-height: 1.5;
     }
 
     /* Header */
@@ -45,90 +56,338 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 2rem 4rem;
-      background: transparent;
-      flex-shrink: 0;
+      padding: 1.8rem 4rem;
+      background: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
     }
 
     .logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: white;
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #ffffff;
       text-decoration: none;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .btn-client {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      text-decoration: none;
-      padding: 0.8rem 1.5rem;
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .btn-header-app {
+      background: rgba(56, 189, 248, 0.1);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.65rem 1.3rem;
       border-radius: 8px;
-      font-weight: 500;
-      font-size: 1.1rem;
-      transition: background 0.2s, color 0.2s;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    
-    .btn-client:hover {
-      background: white;
-      color: black;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
     }
 
-    /* Main Area */
+    .btn-header-app:hover {
+      background: #38bdf8;
+      color: #0a0e17;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+
+    .user-profile-badge {
+      display: none;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(31, 41, 55, 0.6);
+      padding: 0.4rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid var(--card-border);
+      font-size: 0.9rem;
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--c-pro);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 0.85rem;
+    }
+
+    .btn-logout {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 0.5rem;
+      text-decoration: underline;
+    }
+
+    .btn-auth-trigger {
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      padding: 0.65rem 1.4rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-auth-trigger:hover {
+      background: white;
+      color: #0a0e17;
+    }
+
+    /* Main Content */
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      max-width: 1800px;
+      padding: 2.5rem 2rem 5rem 2rem;
+      max-width: 1700px;
       margin: 0 auto;
       width: 100%;
     }
 
+    /* Hero Section */
     .hero {
       text-align: center;
-      margin-bottom: clamp(2rem, 5vh, 4rem);
-      max-width: 1400px;
+      margin-bottom: 4rem;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    /* Textos Hero Escalados a x1.5 para PC */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: #c084fc;
+      padding: 0.4rem 1.2rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
     .hero h1 {
-      font-size: clamp(2.5rem, 5vw, 3.9rem);
-      font-weight: 700;
-      line-height: 1.2;
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.18;
       margin-bottom: 1.2rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .hero p {
-      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
       color: var(--text-muted);
+      max-width: 900px;
       line-height: 1.5;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero-btn {
+      padding: 0.9rem 2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-btn.primary {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      color: white;
+      box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.4);
+      border: none;
+    }
+
+    .hero-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.6);
+    }
+
+    .hero-btn.secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .hero-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* App Download Section Banner */
+    .app-banner {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2.5rem 3rem;
+      margin-bottom: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .app-banner-info h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    .app-banner-info p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 650px;
+    }
+
+    .app-download-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .app-store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.75rem 1.4rem;
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .app-store-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .app-store-btn svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .app-btn-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .app-btn-text span:first-child {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .app-btn-text span:last-child {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: white;
     }
 
     /* Pricing Grid */
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .pricing-header h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 2.5rem;
+      gap: 2rem;
       width: 100%;
       align-items: stretch;
-      padding-bottom: 4rem;
+      padding-bottom: 2rem;
     }
 
-    /* Tarjetas y Contenidos Escalados a x2 para PC */
+    /* Cards */
     .card {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
-      border-radius: 24px;
-      padding: clamp(1.8rem, 3vw, 3.6rem);
+      border-radius: 20px;
+      padding: 2.2rem 1.8rem;
       display: flex;
       flex-direction: column;
-      text-decoration: none;
       position: relative;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Card Themes */
@@ -138,140 +397,576 @@
     .card.ent { --theme-color: var(--c-ent); }
 
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 45px -15px var(--theme-color);
-      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-6px);
+      box-shadow: 0 15px 35px -10px var(--theme-color);
+      border-color: rgba(255, 255, 255, 0.25);
     }
 
     /* Highlighted Pro Card */
     .card.pro {
-      transform: scale(1.05);
-      border: 3px solid var(--theme-color);
-      background: #151025;
-      box-shadow: 0 0 35px -15px var(--theme-color);
+      transform: scale(1.03);
+      border: 2px solid var(--theme-color);
+      background: #141026;
+      box-shadow: 0 0 30px -10px var(--theme-color);
       z-index: 10;
     }
     
     .card.pro:hover {
-      transform: scale(1.05) translateY(-8px);
-      box-shadow: 0 20px 50px -15px var(--theme-color);
+      transform: scale(1.03) translateY(-6px);
+      box-shadow: 0 20px 45px -10px var(--theme-color);
     }
 
     .badge {
       position: absolute;
-      top: -16px;
+      top: -14px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--theme-color);
+      background: linear-gradient(135deg, var(--c-pro) 0%, #7c3aed 100%);
       color: white;
-      padding: 0.4rem 1.2rem;
+      padding: 0.35rem 1.1rem;
       border-radius: 9999px;
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-size: 0.85rem;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
     }
 
     .card-title {
-      font-size: 2.7rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
       color: var(--text-main);
     }
 
+    /* Pricing Info inside Card */
+    .card-price-box {
+      margin-bottom: 1.2rem;
+    }
+
+    .price-tag {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--theme-color);
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
+    .price-period {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .price-subtext {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+      font-weight: 500;
+    }
+
     .card-divider {
-      height: 2px;
+      height: 1px;
       background: var(--card-border);
-      margin: 1.5rem 0 2rem 0;
+      margin: 0.8rem 0 1.5rem 0;
       width: 100%;
     }
 
     .card-features {
       list-style: none;
       flex: 1;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .card-features li {
-      font-size: clamp(1.2rem, 1.8vw, 1.8rem);
-      color: var(--text-muted);
-      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
       display: flex;
       align-items: flex-start;
       line-height: 1.4;
     }
 
     .card-features li svg {
-      width: 28px;
-      height: 28px;
-      margin-right: 0.8rem;
+      width: 22px;
+      height: 22px;
+      margin-right: 0.7rem;
       color: var(--theme-color);
       flex-shrink: 0;
-      margin-top: 4px;
-      stroke-width: 3.5;
+      margin-top: 2px;
+    }
+
+    /* Card Action Buttons */
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: auto;
     }
 
     .card-btn {
       display: block;
       width: 100%;
       text-align: center;
-      padding: 1.5rem;
+      padding: 1.1rem;
       border-radius: 12px;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.06);
       color: white;
-      font-weight: 600;
-      font-size: 1.9rem;
-      transition: background 0.2s, border-color 0.2s;
-      border: 2px solid rgba(255,255,255,0.1);
-      margin-top: auto;
+      font-weight: 700;
+      font-size: 1.25rem;
+      transition: all 0.2s ease;
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      cursor: pointer;
     }
 
     .card:hover .card-btn {
       background: var(--theme-color);
       border-color: var(--theme-color);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
-    
+
     .card.pro .card-btn {
       background: var(--theme-color);
       border-color: var(--theme-color);
+      color: #ffffff;
     }
 
-    /* Responsive fallbacks */
-    @media (max-width: 1600px) {
-      .grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-      .card.pro { transform: none; border-width: 2px; }
-      .card.pro:hover { transform: translateY(-8px); }
-      header { padding: 1.5rem 2rem; }
+    .card-btn-more {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    
+
+    .card-btn-more:hover {
+      color: white;
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* Modals Overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-container {
+      background: #111827;
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 580px;
+      padding: 2.5rem;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: var(--text-muted);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    /* Auth Modal Tabs & Forms */
+    .auth-tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.3rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 0.75rem;
+      text-align: center;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .auth-tab.active {
+      background: var(--card-bg);
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.85rem 1.1rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: white;
+      font-size: 0.98rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--c-pro);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+    }
+
+    .form-control::placeholder {
+      color: #475569;
+    }
+
+    .plan-selected-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: #c084fc;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px -5px rgba(168, 85, 247, 0.4);
+    }
+
+    /* Details Modal Styles */
+    .details-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .details-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.3rem;
+    }
+
+    .details-badge {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--theme-color);
+      margin-bottom: 1rem;
+    }
+
+    .details-description {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .details-features-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.8rem;
+    }
+
+    .details-features-list {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .details-features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+      color: #cbd5e1;
+      font-size: 0.98rem;
+    }
+
+    .details-features-list svg {
+      width: 20px;
+      height: 20px;
+      color: #22c55e;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Notification / Toast */
+    .alert-box {
+      padding: 0.85rem 1.1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+      display: none;
+    }
+
+    .alert-box.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .alert-box.success {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+    }
+
+    /* Success Dashboard View inside Modal */
+    .success-modal-content {
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .success-icon-circle {
+      width: 70px;
+      height: 70px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 2px solid #22c55e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem auto;
+      color: #22c55e;
+    }
+
+    .success-icon-circle svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 3rem 4rem;
+      background: rgba(10, 14, 23, 0.95);
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.8rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1400px) {
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+      .card.pro { transform: none; }
+      .card.pro:hover { transform: translateY(-6px); }
+    }
+
+    @media (max-width: 900px) {
+      header { padding: 1.2rem 1.5rem; }
+      main { padding: 2rem 1rem 4rem 1rem; }
+      .app-banner { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+      .app-banner-info p { max-width: 100%; }
+      .app-download-buttons { justify-content: center; }
+    }
+
     @media (max-width: 768px) {
       .grid { grid-template-columns: 1fr; }
       .hero h1 { font-size: 2.2rem; }
-      .hero p { font-size: 1.2rem; }
-      .card-title { font-size: 2rem; }
-      .card-features li { font-size: 1.2rem; }
-      .card-btn { font-size: 1.4rem; padding: 1rem; }
+      .hero p { font-size: 1.1rem; }
+      .hero-actions { flex-direction: column; width: 100%; }
+      .hero-btn { width: 100%; justify-content: center; }
+      .modal-container { padding: 1.8rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Header -->
   <header>
-    <a href="#" class="logo">GESTARIAN</a>
-    <a href="https://clientes-gestarian.web.app" class="btn-client" target="_blank" rel="noopener noreferrer">Área de Clientes</a>
+    <div class="logo-container">
+      <a href="#" class="logo">GESTARIAN</a>
+    </div>
+
+    <div class="header-actions">
+      <!-- Direct App Download Button -->
+      <button class="btn-header-app" onclick="openAppDownloadModal()">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Descargar App
+      </button>
+
+      <!-- Auth State Badge / Button -->
+      <div id="user-badge" class="user-profile-badge">
+        <div id="user-avatar" class="user-avatar">U</div>
+        <span id="user-email-display" style="font-weight: 600; color: white;">user@email.com</span>
+        <button class="btn-logout" onclick="logoutUser()">Salir</button>
+      </div>
+
+      <button id="btn-login-trigger" class="btn-auth-trigger" onclick="openAuthModal('login')">
+        Iniciar Sesión
+      </button>
+    </div>
   </header>
 
+  <!-- Main Section -->
   <main>
+
+    <!-- Hero Section -->
     <div class="hero">
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        Ecosistema Inteligente de Gestión Documental
+      </div>
       <h1>Gestión documental automatizada y asistida por IA para profesionales independientes y empresas.</h1>
       <p>Toda la gestión con acceso inmediato en tiempo real en tu bolsillo.</p>
+      
+      <div class="hero-actions">
+        <a href="#pricing" class="hero-btn primary">
+          Ver Planes de Precios
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <button onclick="openAppDownloadModal()" class="hero-btn secondary">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 18H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><polyline points="16 22 22 16 16 10"></polyline></svg>
+          Descargar App Mobile
+        </button>
+      </div>
+    </div>
+
+    <!-- App Mobile Download Banner -->
+    <section class="app-banner">
+      <div class="app-banner-info">
+        <h2>Lleva GESTARIAN en tu bolsillo</h2>
+        <p>Sincronización en tiempo real entre tu ordenador y tu móvil. Genera facturas, gestiona clientes y escanea recibos desde cualquier lugar.</p>
+      </div>
+      <div class="app-download-buttons">
+        <a href="javascript:void(0)" onclick="openAppDownloadModal()" class="app-store-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L16.793 15 13.5 18.293 1.34 6.133C1.047 5.84 1 5.433 1 5c0-.433.047-.84.34-1.133L3.609 1.814zm1.414-1.414l12.793 12.793L21.109 9.9 5.023.4c-.453-.267-.977-.4-1.5-.4-.523 0-1.047.133-1.5.4l3 3zm15.793 15.793L8.023 23.6c.453.267.977.4 1.5.4.523 0 1.047-.133 1.5-.4l9.793-9.793-2.023-2.023zm-3.293 3.293L4.309 6.293 2.895 7.707l13.211 13.211 1.414-1.414z"/></svg>
+          <div class="app-btn-text">
+            <span>Disponible en</span>
+            <span>Google Play</span>
+          </div>
+        </a>
+        <a href="javascript:void(0)" onclick="openAppDownloadModal()" class="app-store-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.8 1.1-1.92.98-3.04-.95.04-2.1.63-2.78 1.43-.61.71-1.14 1.86-1 2.98 1.06.08 2.14-.56 2.8-1.37z"/></svg>
+          <div class="app-btn-text">
+            <span>Descargar para</span>
+            <span>App Store</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <div id="pricing" class="pricing-header">
+      <h2>Elige el plan adaptado a tu negocio</h2>
+      <p>Comienza a trabajar de inmediato con la máxima potencia</p>
     </div>
 
     <div class="grid">
       
       <!-- Quick -->
-      <a href="https://quick-gestarian.web.app" class="card quick" target="_blank" rel="noopener noreferrer">
+      <div class="card quick">
         <h2 class="card-title">Quick</h2>
+        <div class="card-price-box">
+          <div class="price-tag">0 € <span class="price-period">/ siempre</span></div>
+          <div class="price-subtext">Gratis para siempre</div>
+        </div>
         <div class="card-divider"></div>
         <ul class="card-features">
           <li>
@@ -287,12 +982,19 @@
             100% móvil
           </li>
         </ul>
-        <div class="card-btn">Acceder</div>
-      </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="handlePlanAccess('quick')">Acceder</button>
+          <button class="card-btn-more" onclick="openPlanDetails('quick')">Más Información</button>
+        </div>
+      </div>
 
       <!-- Lite -->
-      <a href="https://lite-gestarian.web.app" class="card lite" target="_blank" rel="noopener noreferrer">
+      <div class="card lite">
         <h2 class="card-title">Lite</h2>
+        <div class="card-price-box">
+          <div class="price-tag">0 € <span class="price-period">/ siempre</span></div>
+          <div class="price-subtext">Gratis para siempre</div>
+        </div>
         <div class="card-divider"></div>
         <ul class="card-features">
           <li>
@@ -308,13 +1010,20 @@
             Gestión de clientes
           </li>
         </ul>
-        <div class="card-btn">Acceder</div>
-      </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="handlePlanAccess('lite')">Acceder</button>
+          <button class="card-btn-more" onclick="openPlanDetails('lite')">Más Información</button>
+        </div>
+      </div>
 
-      <!-- Pro -->
-      <a href="https://pro-gestarian.web.app" class="card pro" target="_blank" rel="noopener noreferrer">
+      <!-- Pro (Recomendado) -->
+      <div class="card pro">
         <div class="badge">Recomendado</div>
         <h2 class="card-title">Pro</h2>
+        <div class="card-price-box">
+          <div class="price-tag">0 € <span class="price-period">/ 6 meses</span></div>
+          <div class="price-subtext">Probar gratis 6 meses</div>
+        </div>
         <div class="card-divider"></div>
         <ul class="card-features">
           <li>
@@ -330,12 +1039,19 @@
             Informes para gestoría
           </li>
         </ul>
-        <div class="card-btn">Acceder</div>
-      </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="handlePlanAccess('pro')">Acceder</button>
+          <button class="card-btn-more" onclick="openPlanDetails('pro')">Más Información</button>
+        </div>
+      </div>
 
       <!-- Enterprise -->
-      <a href="https://enterprise-gestarian.web.app" class="card ent" target="_blank" rel="noopener noreferrer">
+      <div class="card ent">
         <h2 class="card-title">Enterprise</h2>
+        <div class="card-price-box">
+          <div class="price-tag">0 € <span class="price-period">/ 6 meses</span></div>
+          <div class="price-subtext">Probar gratis 6 meses</div>
+        </div>
         <div class="card-divider"></div>
         <ul class="card-features">
           <li>
@@ -351,11 +1067,704 @@
             Analítica a medida
           </li>
         </ul>
-        <div class="card-btn">Acceder</div>
-      </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="handlePlanAccess('enterprise')">Acceder</button>
+          <button class="card-btn-more" onclick="openPlanDetails('enterprise')">Más Información</button>
+        </div>
+      </div>
 
     </div>
+
   </main>
 
+  <!-- Auth Modal (Registro Fiscal & Login) -->
+  <div id="modal-auth" class="modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close" onclick="closeModal('modal-auth')">&times;</button>
+      
+      <div class="auth-tabs">
+        <button id="tab-register" class="auth-tab active" onclick="switchAuthTab('register')">Registro Fiscal</button>
+        <button id="tab-login" class="auth-tab" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+      </div>
+
+      <div id="auth-plan-badge" class="plan-selected-tag">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Plan Seleccionado: <span id="auth-plan-name">PRO</span>
+      </div>
+
+      <div id="auth-error" class="alert-box error"></div>
+      <div id="auth-success" class="alert-box success"></div>
+
+      <!-- Registration Form -->
+      <form id="form-register" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group">
+          <label for="reg-razon">Nombre o Razón Social *</label>
+          <input type="text" id="reg-razon" class="form-control" placeholder="Ej: Talleres Gomez S.L. / Juan Perez" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="reg-nif">NIF / CIF *</label>
+            <input type="text" id="reg-nif" class="form-control" placeholder="B12345678" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-telefono">Teléfono / WhatsApp *</label>
+            <input type="tel" id="reg-telefono" class="form-control" placeholder="+34 600000000" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-direccion">Dirección Fiscal *</label>
+          <input type="text" id="reg-direccion" class="form-control" placeholder="Calle Ejemplo 123, Madrid" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email Corporativo *</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="contacto@empresa.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Contraseña *</label>
+          <input type="password" id="reg-password" class="form-control" placeholder="Mínimo 6 caracteres" required minlength="6">
+        </div>
+
+        <button type="submit" id="btn-submit-reg" class="btn-submit">
+          <span>Completar Registro y Entrar</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </form>
+
+      <!-- Login Form -->
+      <form id="form-login" style="display: none;" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label for="login-email">Email Registrado *</label>
+          <input type="email" id="login-email" class="form-control" placeholder="contacto@empresa.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Contraseña *</label>
+          <input type="password" id="login-password" class="form-control" placeholder="Tu contraseña" required>
+        </div>
+
+        <button type="submit" id="btn-submit-login" class="btn-submit">
+          <span>Iniciar Sesión y Entrar</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Plan Details Modal ("Más Información") -->
+  <div id="modal-details" class="modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close" onclick="closeModal('modal-details')">&times;</button>
+
+      <div class="details-header">
+        <h2 id="details-title" class="details-title">Plan Quick</h2>
+        <div id="details-badge" class="details-badge">0 € / Gratis para siempre</div>
+        <p id="details-description" class="details-description">Descripción detallada del plan seleccionado.</p>
+      </div>
+
+      <div class="details-features-title">Características Incluidas:</div>
+      <ul id="details-features-list" class="details-features-list">
+        <!-- Injected via JavaScript -->
+      </ul>
+
+      <button id="btn-details-access" class="btn-submit" onclick="handleDetailsAccess()">
+        <span>Acceder a este Plan</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- App Download Modal -->
+  <div id="modal-download" class="modal-overlay">
+    <div class="modal-container" style="text-align: center;">
+      <button class="modal-close" onclick="closeModal('modal-download')">&times;</button>
+      
+      <div style="width: 60px; height: 60px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem auto;">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      </div>
+
+      <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; color: white;">Descarga la App de GESTARIAN</h2>
+      <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 2rem;">Accede a tu gestión documental directamente desde tu dispositivo móvil con sincronización en tiempo real.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+        <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" class="app-store-btn" style="justify-content: center; width: 100%;">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M3.609 1.814L16.793 15 13.5 18.293 1.34 6.133C1.047 5.84 1 5.433 1 5c0-.433.047-.84.34-1.133L3.609 1.814zm1.414-1.414l12.793 12.793L21.109 9.9 5.023.4c-.453-.267-.977-.4-1.5-.4-.523 0-1.047.133-1.5.4l3 3zm15.793 15.793L8.023 23.6c.453.267.977.4 1.5.4.523 0 1.047-.133 1.5-.4l9.793-9.793-2.023-2.023zm-3.293 3.293L4.309 6.293 2.895 7.707l13.211 13.211 1.414-1.414z"/></svg>
+          <div class="app-btn-text">
+            <span>Descargar para Android</span>
+            <span>Google Play Store</span>
+          </div>
+        </a>
+
+        <a href="https://apps.apple.com" target="_blank" rel="noopener noreferrer" class="app-store-btn" style="justify-content: center; width: 100%;">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.8 1.1-1.92.98-3.04-.95.04-2.1.63-2.78 1.43-.61.71-1.14 1.86-1 2.98 1.06.08 2.14-.56 2.8-1.37z"/></svg>
+          <div class="app-btn-text">
+            <span>Descargar para iOS</span>
+            <span>Apple App Store</span>
+          </div>
+        </a>
+      </div>
+
+      <button onclick="closeModal('modal-download')" class="card-btn-more" style="width: 100%;">Cerrar Ventana</button>
+    </div>
+  </div>
+
+  <!-- Registration Success / Dashboard Link Modal -->
+  <div id="modal-success-dash" class="modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close" onclick="closeModal('modal-success-dash')">&times;</button>
+
+      <div class="success-modal-content">
+        <div class="success-icon-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+
+        <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; color: white;">¡Registro Completado con Éxito!</h2>
+        <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem;">Hemos registrado tus datos fiscales correctamente. Te hemos enviado un email con las instrucciones de descarga y bienvenida.</p>
+
+        <div style="background: rgba(31, 41, 55, 0.5); padding: 1rem; border-radius: 12px; border: 1px solid var(--card-border); margin-bottom: 1.8rem; text-align: left;">
+          <div style="font-weight: 700; color: #38bdf8; margin-bottom: 0.3rem;">Acceso a tu Panel de Control:</div>
+          <div id="success-plan-display" style="color: white; font-size: 0.95rem;">Plan Activado: <strong style="color: var(--c-pro)">GESTARIAN PRO</strong></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+          <button id="btn-enter-dashboard" class="btn-submit" onclick="redirectToDashboard()">
+            <span>Entrar al Dashboard</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+
+          <button onclick="openAppDownloadModal()" class="hero-btn secondary" style="width: 100%; justify-content: center;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Descargar Aplicación Mobile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">
+      <a href="#" class="logo" style="font-size: 1.5rem;">GESTARIAN</a>
+      <p>© 2026 GESTARIAN. Todos los derechos reservados. Gestión documental asistida por IA.</p>
+    </div>
+
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="openAppDownloadModal()">Descargar App</a>
+      <a href="#pricing">Planes y Precios</a>
+      <a href="javascript:void(0)" onclick="openAuthModal('login')">Iniciar Sesión</a>
+    </div>
+  </footer>
+
+  <!-- Logic & Interactions -->
+  <script>
+    // --- SUPABASE & CONSTANTS ---
+    const SUPABASE_URL = 'https://qjeqvgbsathhxikwdcco.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZXF2Z2JzYXRoaHhpa3dkY2NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTI2NDAsImV4cCI6MjEwNDI2ODY0MH0.sHdOYpsU1WgEhZkZkmSyZBENy0_lJyPJf8FDlb8wkHE';
+
+    let supabaseClient = null;
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      } catch (e) {
+        console.warn('[Supabase] Error al inicializar cliente:', e);
+      }
+    }
+
+    const PLAN_URLS = {
+      quick: 'https://quick-gestarian.web.app',
+      lite: 'https://lite-gestarian.web.app',
+      pro: 'https://pro-gestarian.web.app',
+      enterprise: 'https://enterprise-gestarian.web.app'
+    };
+
+    const PLAN_DETAILS = {
+      quick: {
+        title: 'Plan Quick',
+        badge: '0 € / Gratis para siempre',
+        color: 'var(--c-quick)',
+        description: 'La solución ágil y rápida para emitir facturas y enviarlas de inmediato por WhatsApp o email a tus clientes directamente desde tu dispositivo móvil.',
+        features: [
+          'Facturación ultra rápida en segundos',
+          'Envíos automáticos e instantáneos por WhatsApp y Email',
+          'Optimizada 100% para teléfonos móviles y tablets',
+          'Catálogo ilimitado de clientes y productos',
+          'Generación instantánea de PDFs con código QR'
+        ]
+      },
+      lite: {
+        title: 'Plan Lite',
+        badge: '0 € / Gratis para siempre',
+        color: 'var(--c-lite)',
+        description: 'Gestión comercial completa para autónomos y pequeños negocios que buscan controlar sus ingresos, gastos, presupuestos y caja diaria.',
+        features: [
+          'Control total de caja diaria y arqueos',
+          'Presupuestos y presupuestos convertibles en factura con 1 clic',
+          'Gestión avanzada de fichas de clientes y proveedores',
+          'Panel visual de ingresos y cobros pendientes',
+          'Exportación de listados de facturación'
+        ]
+      },
+      pro: {
+        title: 'Plan Pro (Recomendado)',
+        badge: '0 € durante 6 meses (Prueba Gratuita)',
+        color: 'var(--c-pro)',
+        description: 'Potenciada por Inteligencia Artificial para automatizar la extracción de datos de tus facturas y gastos en segundos.',
+        features: [
+          'Escaneo e interpretación OCR asistido por Inteligencia Artificial',
+          'Extracción automática de importes, NIF, fechas y conceptos',
+          'Informes y resúmenes automáticos listos para tu gestoría',
+          'Gestión inteligente de gastos e ingresos',
+          'Sincronización multi-dispositivo en tiempo real'
+        ]
+      },
+      enterprise: {
+        title: 'Plan Enterprise',
+        badge: '0 € durante 6 meses (Prueba Gratuita)',
+        color: 'var(--c-ent)',
+        description: 'Entorno de alta capacidad diseñado para empresas, grupos de gestión y entornos multi-sociedad que requieren máximo control y analítica.',
+        features: [
+          'Entorno de trabajo Multi-Empresa sin límites',
+          'Gestión de roles y permisos avanzados por usuario',
+          'Analítica e informes personalizados a medida',
+          'Integración vía API y exportación contable avanzada',
+          'Soporte prioritario 24/7 y asesoramiento técnico dedicado'
+        ]
+      }
+    };
+
+    let selectedPlan = 'pro';
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+      checkUserSession();
+      handleUrlQueryParams();
+    });
+
+    // Check if user session exists in localStorage or Supabase
+    function checkUserSession() {
+      const savedSession = localStorage.getItem('gestarian_user_session');
+      if (savedSession) {
+        try {
+          const user = JSON.parse(savedSession);
+          showUserLoggedInUI(user);
+        } catch (e) {
+          console.error('Error leyendo sesión local:', e);
+        }
+      } else if (supabaseClient) {
+        supabaseClient.auth.getSession().then(({ data }) => {
+          if (data && data.session && data.session.user) {
+            const user = {
+              email: data.session.user.email,
+              id: data.session.user.id
+            };
+            localStorage.setItem('gestarian_user_session', JSON.stringify(user));
+            showUserLoggedInUI(user);
+          }
+        });
+      }
+    }
+
+    function showUserLoggedInUI(user) {
+      const userBadge = document.getElementById('user-badge');
+      const loginBtn = document.getElementById('btn-login-trigger');
+      const emailDisplay = document.getElementById('user-email-display');
+      const avatarDisplay = document.getElementById('user-avatar');
+
+      if (userBadge && loginBtn) {
+        userBadge.style.display = 'inline-flex';
+        loginBtn.style.display = 'none';
+        if (emailDisplay) emailDisplay.textContent = user.email || 'Usuario';
+        if (avatarDisplay) avatarDisplay.textContent = (user.email || 'U').charAt(0).toUpperCase();
+      }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('gestarian_user_session');
+      if (supabaseClient) {
+        supabaseClient.auth.signOut();
+      }
+      window.location.reload();
+    }
+
+    // Handle deep-linking via query parameters (e.g. /index.html?plan=pro or ?action=register&plan=lite)
+    function handleUrlQueryParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const planParam = urlParams.get('plan');
+      const actionParam = urlParams.get('action');
+
+      if (planParam && PLAN_URLS[planParam.toLowerCase()]) {
+        selectedPlan = planParam.toLowerCase();
+      }
+
+      if (actionParam === 'register') {
+        openAuthModal('register', selectedPlan);
+      } else if (actionParam === 'login') {
+        openAuthModal('login', selectedPlan);
+      }
+    }
+
+    // --- MAIN ACCEDER LOGIC ---
+    // Rule 3:
+    // - If logged in and saved data -> directly access specified version.
+    // - If not registered -> opens registration form for fiscal data.
+    // - If registered but not logged in -> opens login form.
+    function handlePlanAccess(plan) {
+      selectedPlan = plan || 'pro';
+      const savedSession = localStorage.getItem('gestarian_user_session');
+
+      if (savedSession) {
+        // Logged in user: Redirect directly to plan dashboard
+        window.location.href = PLAN_URLS[selectedPlan] || PLAN_URLS.pro;
+      } else {
+        // Not logged in: Open Registration Modal prefilled for this plan
+        openAuthModal('register', selectedPlan);
+      }
+    }
+
+    // --- AUTH MODAL HANDLERS ---
+    function openAuthModal(mode = 'register', plan = selectedPlan) {
+      selectedPlan = plan;
+      const modal = document.getElementById('modal-auth');
+      const planNameDisplay = document.getElementById('auth-plan-name');
+      
+      if (planNameDisplay) {
+        planNameDisplay.textContent = selectedPlan.toUpperCase();
+        planNameDisplay.style.color = `var(--c-${selectedPlan === 'enterprise' ? 'ent' : selectedPlan})`;
+      }
+
+      hideAlerts();
+      switchAuthTab(mode);
+      if (modal) modal.classList.add('active');
+    }
+
+    function switchAuthTab(tab) {
+      const regTab = document.getElementById('tab-register');
+      const loginTab = document.getElementById('tab-login');
+      const regForm = document.getElementById('form-register');
+      const loginForm = document.getElementById('form-login');
+
+      hideAlerts();
+
+      if (tab === 'register') {
+        if (regTab) regTab.classList.add('active');
+        if (loginTab) loginTab.classList.remove('active');
+        if (regForm) regForm.style.display = 'block';
+        if (loginForm) loginForm.style.display = 'none';
+      } else {
+        if (loginTab) loginTab.classList.add('active');
+        if (regTab) regTab.classList.remove('active');
+        if (loginForm) loginForm.style.display = 'block';
+        if (regForm) regForm.style.display = 'none';
+      }
+    }
+
+    function hideAlerts() {
+      const errBox = document.getElementById('auth-error');
+      const succBox = document.getElementById('auth-success');
+      if (errBox) errBox.style.display = 'none';
+      if (succBox) succBox.style.display = 'none';
+    }
+
+    function showError(msg) {
+      const errBox = document.getElementById('auth-error');
+      if (errBox) {
+        errBox.textContent = msg;
+        errBox.style.display = 'block';
+      }
+    }
+
+    function showSuccess(msg) {
+      const succBox = document.getElementById('auth-success');
+      if (succBox) {
+        succBox.textContent = msg;
+        succBox.style.display = 'block';
+      }
+    }
+
+    // Handle Fiscal Registration Submission
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      hideAlerts();
+
+      const submitBtn = document.getElementById('btn-submit-reg');
+      const razonSocial = document.getElementById('reg-razon').value.trim();
+      const nif = document.getElementById('reg-nif').value.trim();
+      const telefono = document.getElementById('reg-telefono').value.trim();
+      const direccion = document.getElementById('reg-direccion').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+
+      if (!razonSocial || !nif || !telefono || !direccion || !email || !password) {
+        showError('Por favor, rellene todos los campos obligatorios (*).');
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.querySelector('span').textContent = 'Registrando en Supabase...';
+      }
+
+      const userData = {
+        razonSocial,
+        nif,
+        telefono,
+        direccion,
+        email,
+        plan: selectedPlan,
+        registeredAt: new Date().toISOString()
+      };
+
+      try {
+        let authUserId = null;
+
+        // 1. Registrar usuario en Supabase Auth si está disponible
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+              data: userData
+            }
+          });
+
+          if (error) {
+            console.warn('[Supabase Auth Warning]:', error.message);
+            // Si el usuario ya existe, intentar iniciar sesión
+            if (error.message.includes('already registered')) {
+              showError('Este email ya está registrado. Por favor, cambia a la pestaña "Iniciar Sesión".');
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('span').textContent = 'Completar Registro y Entrar';
+              }
+              return;
+            }
+          } else if (data && data.user) {
+            authUserId = data.user.id;
+          }
+
+          // 2. Guardar ficha de datos fiscales en tabla de Supabase gestarian_usuarios
+          try {
+            await supabaseClient.from('gestarian_usuarios').upsert({
+              id: authUserId,
+              email: email,
+              razon_social: razonSocial,
+              nif_cif: nif,
+              telefono: telefono,
+              direccion: direccion,
+              plan_contratado: selectedPlan,
+              updated_at: new Date().toISOString()
+            });
+          } catch (dbErr) {
+            console.warn('[Supabase DB Table warning]:', dbErr);
+          }
+        }
+
+        // 3. Guardar sesión localmente
+        const sessionObj = {
+          email: email,
+          razonSocial: razonSocial,
+          nif: nif,
+          telefono: telefono,
+          plan: selectedPlan,
+          id: authUserId || ('user_' + Date.now())
+        };
+        localStorage.setItem('gestarian_user_session', JSON.stringify(sessionObj));
+
+        // 4. Enviar email automático y preparar WhatsApp mediante backend Edge Function
+        await triggerPostRegistrationBackend(sessionObj);
+
+        // 5. Cerrar modal de auth y abrir pantalla de confirmación/dashboard
+        closeModal('modal-auth');
+        showRegistrationSuccessModal(sessionObj);
+
+      } catch (err) {
+        console.error('Error durante el registro:', err);
+        showError('Ocurrió un inconveniente al completar el registro. Inténtelo de nuevo.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.querySelector('span').textContent = 'Completar Registro y Entrar';
+        }
+      }
+    }
+
+    // Handle Login Submission
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      hideAlerts();
+
+      const submitBtn = document.getElementById('btn-submit-login');
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        showError('Por favor, ingresa tu email y contraseña.');
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.querySelector('span').textContent = 'Iniciando sesión...';
+      }
+
+      try {
+        let loggedInUser = { email: email, plan: selectedPlan };
+
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+          if (error) {
+            showError('Credenciales incorrectas o usuario no encontrado: ' + error.message);
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.querySelector('span').textContent = 'Iniciar Sesión y Entrar';
+            }
+            return;
+          }
+
+          if (data && data.user) {
+            loggedInUser.id = data.user.id;
+          }
+        }
+
+        localStorage.setItem('gestarian_user_session', JSON.stringify(loggedInUser));
+        showUserLoggedInUI(loggedInUser);
+
+        closeModal('modal-auth');
+        // Redirigir al dashboard de su versión
+        window.location.href = PLAN_URLS[selectedPlan] || PLAN_URLS.pro;
+
+      } catch (err) {
+        console.error('Error iniciando sesión:', err);
+        showError('Error al iniciar sesión. Compruebe sus datos.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.querySelector('span').textContent = 'Iniciar Sesión y Entrar';
+        }
+      }
+    }
+
+    // Envío automático de Email y WhatsApp post-registro
+    async function triggerPostRegistrationBackend(user) {
+      const planName = (user.plan || 'pro').toUpperCase();
+      const dashUrl = PLAN_URLS[user.plan] || PLAN_URLS.pro;
+
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; background-color: #0a0e17; color: #f8fafc; padding: 30px; border-radius: 12px;">
+          <h1 style="color: #a855f7; margin-bottom: 10px;">¡Bienvenido a GESTARIAN, ${user.razonSocial || 'Cliente'}!</h1>
+          <p style="font-size: 16px; color: #cbd5e1; line-height: 1.5;">
+            Tu registro en el plan <strong>GESTARIAN ${planName}</strong> se ha completado con éxito.
+          </p>
+          <div style="background-color: #111827; border: 1px solid #1f2937; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #38bdf8; margin-top: 0;">Resumen de Registro Fiscal:</h3>
+            <p style="margin: 5px 0;"><strong>Razón Social:</strong> ${user.razonSocial}</p>
+            <p style="margin: 5px 0;"><strong>NIF/CIF:</strong> ${user.nif}</p>
+            <p style="margin: 5px 0;"><strong>Email:</strong> ${user.email}</p>
+            <p style="margin: 5px 0;"><strong>Teléfono:</strong> ${user.telefono}</p>
+          </div>
+          <p style="font-size: 15px; color: #cbd5e1;">Haz clic a continuación para acceder a tu panel de gestión:</p>
+          <a href="${dashUrl}" style="display: inline-block; background: #a855f7; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 25px;">Acceder a mi Dashboard (${planName})</a>
+          
+          <hr style="border: 0; border-top: 1px solid #1f2937; margin: 20px 0;">
+          <p style="font-size: 14px; color: #94a3b8;">Lleva GESTARIAN en tu teléfono inteligente descargando la App oficial en Google Play o Apple App Store.</p>
+        </div>
+      `;
+
+      // Invocación a Supabase Edge Function send-communication
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient.functions.invoke('send-communication', {
+            body: {
+              recipient: user.email,
+              subject: `¡Bienvenido a GESTARIAN ${planName}! Descarga la App`,
+              content: emailHtml
+            }
+          });
+          console.log('[Backend Email Notification Response]:', data, error);
+        } catch (e) {
+          console.warn('Incapaz de invocar Edge Function directamente:', e);
+        }
+      }
+
+      // Preparación de WhatsApp Web fallback
+      if (user.telefono) {
+        const cleanPhone = user.telefono.replace(/[^0-9]/g, '');
+        const text = encodeURIComponent(`Hola ${user.razonSocial}, ¡bienvenido a GESTARIAN ${planName}! Tu cuenta está lista. Accede a tu panel aquí: ${dashUrl}`);
+        window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
+      }
+    }
+
+    // Show Success Modal Post-Registration
+    function showRegistrationSuccessModal(user) {
+      const modal = document.getElementById('modal-success-dash');
+      const planDisplay = document.getElementById('success-plan-display');
+      
+      if (planDisplay) {
+        planDisplay.innerHTML = `Plan Activado: <strong style="color: var(--c-${user.plan === 'enterprise' ? 'ent' : user.plan})">GESTARIAN ${user.plan.toUpperCase()}</strong>`;
+      }
+      
+      showUserLoggedInUI(user);
+      if (modal) modal.classList.add('active');
+    }
+
+    function redirectToDashboard() {
+      window.location.href = PLAN_URLS[selectedPlan] || PLAN_URLS.pro;
+    }
+
+    // --- PLAN DETAILS MODAL ("Más Información") ---
+    function openPlanDetails(plan) {
+      selectedPlan = plan;
+      const details = PLAN_DETAILS[plan] || PLAN_DETAILS.pro;
+      const modal = document.getElementById('modal-details');
+
+      document.getElementById('details-title').textContent = details.title;
+      document.getElementById('details-title').style.color = details.color;
+      document.getElementById('details-badge').textContent = details.badge;
+      document.getElementById('details-description').textContent = details.description;
+
+      const listContainer = document.getElementById('details-features-list');
+      listContainer.innerHTML = '';
+
+      details.features.forEach(feat => {
+        const li = document.createElement('li');
+        li.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${feat}</span>`;
+        listContainer.appendChild(li);
+      });
+
+      if (modal) modal.classList.add('active');
+    }
+
+    function handleDetailsAccess() {
+      closeModal('modal-details');
+      handlePlanAccess(selectedPlan);
+    }
+
+    // --- APP DOWNLOAD MODAL ---
+    function openAppDownloadModal() {
+      const modal = document.getElementById('modal-download');
+      if (modal) modal.classList.add('active');
+    }
+
+    // --- GENERIC MODAL CLOSE ---
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('active');
+    }
+
+    // Close modal when clicking outside content container
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        e.target.classList.remove('active');
+      }
+    });
+  </script>
 </body>
 </html>
