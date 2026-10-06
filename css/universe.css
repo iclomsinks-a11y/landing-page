@@ -1,0 +1,227 @@
+/* =========================================================
+   El Universo GESTARIAN · capa 3D + overlays HTML
+   ========================================================= */
+.universe {
+  position: relative;
+  height: 100vh;
+  min-height: 620px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 50%, rgba(245, 196, 81, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 60% at 20% 80%, rgba(99, 102, 241, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(168, 85, 247, 0.12) 0%, transparent 70%),
+    #030308;
+  isolation: isolate;
+}
+
+.universe::before,
+.universe::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 120px; z-index: 3; pointer-events: none;
+}
+.universe::before { top: 0; background: linear-gradient(180deg, var(--bg) 0%, transparent 100%); }
+.universe::after { bottom: 0; background: linear-gradient(0deg, var(--bg) 0%, transparent 100%); }
+
+#universe-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block;
+  cursor: grab;
+  touch-action: pan-y;
+  outline: none;
+}
+#universe-canvas.dragging { cursor: grabbing; }
+#universe-canvas.pointer { cursor: pointer; }
+.universe.sun-focus #universe-canvas { touch-action: none; }
+
+.universe-title {
+  position: absolute; top: clamp(4.5rem, 9vh, 6.5rem); left: 50%; transform: translateX(-50%);
+  z-index: 5; text-align: center; pointer-events: none; width: 92%;
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.universe-title .eyebrow {
+  color: var(--c-gold); font-weight: 700; letter-spacing: 0.25em; font-size: 0.75rem; text-transform: uppercase;
+}
+.universe-title h2 {
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem); font-weight: 800; margin-top: 0.3rem;
+  background: linear-gradient(120deg, #fff 0%, #c4b5fd 50%, #f5c451 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.universe.sun-focus .universe-title,
+.universe.has-hover .universe-title { opacity: 0; transform: translate(-50%, -12px); }
+
+.universe-hint {
+  position: absolute; bottom: clamp(1.6rem, 5vh, 3rem); left: 50%; transform: translateX(-50%);
+  z-index: 5; display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; width: 94%;
+  pointer-events: none; transition: opacity 0.4s var(--ease);
+}
+.universe-hint span {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  font-size: 0.8rem; color: var(--text-muted);
+  padding: 0.4rem 0.85rem; border-radius: 999px;
+  background: rgba(10, 10, 22, 0.6); border: 1px solid var(--border);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.universe-hint svg { width: 14px; height: 14px; color: var(--c-gold); }
+.universe.sun-focus .universe-hint { opacity: 0; }
+
+/* Overlay que contiene todas las etiquetas proyectadas */
+.u-overlay { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+
+/* ----- Etiquetas de planetas ----- */
+.u-label {
+  --lc: var(--c-pro);
+  position: absolute; left: 0; top: 0;
+  transform: translate3d(-9999px, -9999px, 0);
+  will-change: transform, opacity;
+  text-align: center;
+  transition: opacity 0.4s var(--ease), filter 0.4s var(--ease);
+  white-space: nowrap;
+}
+.u-label .inner {
+  transform: translate(-50%, 0);
+  display: flex; flex-direction: column; align-items: center; gap: 0.15rem;
+  transition: transform 0.45s var(--ease);
+}
+.u-label .name {
+  font-family: var(--font); font-weight: 800; font-size: 1.05rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #fff;
+  text-shadow: 0 0 18px var(--lc), 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+.u-label .meta {
+  font-size: 0.74rem; color: var(--text-muted); font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+.u-label .more {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.45s var(--ease), opacity 0.35s var(--ease), margin 0.35s;
+  display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+}
+.u-label .more .tag {
+  font-size: 0.82rem; font-weight: 700; color: var(--lc);
+  padding: 0.25rem 0.75rem; border-radius: 999px;
+  background: rgba(8, 8, 20, 0.75); border: 1px solid color-mix(in srgb, var(--lc) 45%, transparent);
+}
+.u-label .more .cta { font-size: 0.75rem; color: #fff; opacity: 0.8; }
+.u-label.focus .inner { transform: translate(-50%, 0) scale(1.25); }
+.u-label.focus .more { max-height: 90px; opacity: 1; margin-top: 0.35rem; }
+.u-label.dim { opacity: 0.18; filter: blur(2px); }
+.u-label.hidden { opacity: 0; }
+
+/* ----- Etiquetas de satélites ----- */
+.u-sat {
+  --lc: var(--c-pro);
+  position: absolute; left: 0; top: 0;
+  transform: translate3d(-9999px, -9999px, 0);
+  will-change: transform, opacity;
+  transition: opacity 0.4s var(--ease), filter 0.4s var(--ease);
+}
+.u-sat .chip {
+  transform: translate(-50%, -50%);
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #e9e5ff; white-space: nowrap;
+  padding: 0.18rem 0.5rem; border-radius: 999px;
+  background: rgba(8, 8, 20, 0.6); border: 1px solid color-mix(in srgb, var(--lc) 40%, transparent);
+  transition: opacity 0.3s;
+}
+.u-sat .card {
+  position: absolute; left: 0; top: 0;
+  width: min(250px, 62vw);
+  padding: 0.8rem 0.95rem; border-radius: 14px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--lc) 26%, rgba(10, 10, 24, 0.92)) 0%, rgba(10, 10, 24, 0.92) 100%);
+  border: 1px solid color-mix(in srgb, var(--lc) 55%, transparent);
+  box-shadow: 0 18px 40px -18px var(--lc), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  opacity: 0; transform: translate(-50%, -50%) scale(0.6);
+  transition: opacity 0.35s var(--ease), transform 0.45s var(--ease);
+}
+.u-sat.left .card { transform-origin: right center; }
+.u-sat .card h4 {
+  font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lc); margin-bottom: 0.45rem;
+  font-family: var(--font-body);
+}
+.u-sat .card .chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.u-sat .card .chips span {
+  font-size: 0.74rem; color: #fff; font-weight: 600;
+  padding: 0.2rem 0.5rem; border-radius: 8px; background: rgba(255, 255, 255, 0.07);
+}
+.u-sat .card p { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.45rem; line-height: 1.35; }
+.u-sat .card img {
+  display: block; width: 100%; aspect-ratio: 16 / 6.5; object-fit: cover; object-position: center top;
+  border-radius: 8px; margin-top: 0.5rem;
+}
+.u-sat.focus .chip { opacity: 0; }
+.u-sat.focus .card { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.u-sat.dim { opacity: 0.15; filter: blur(2px); }
+.u-sat.hidden { opacity: 0; }
+
+/* ----- Panel del Sol (versión interactiva al traerlo al frente) ----- */
+.sun-panel {
+  position: absolute; left: 0; top: 0; z-index: 6;
+  width: 320px; height: 420px;
+  transform-origin: 0 0;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.5s var(--ease), visibility 0.5s;
+  color: #2a1600;
+  display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+  padding: 26px 24px;
+}
+.universe.sun-focus .sun-panel.ready { opacity: 1; visibility: visible; pointer-events: auto; }
+.sun-panel .sp-eyebrow {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.28em; text-transform: uppercase; color: #5a3200;
+  display: flex; align-items: center; gap: 6px;
+}
+.sun-panel h3 {
+  font-family: var(--font); font-size: 26px; line-height: 1.08; font-weight: 800; margin: 10px 0 12px;
+  color: #241200; text-shadow: 0 1px 0 rgba(255, 240, 200, 0.6);
+}
+.sun-panel p { font-size: 12.5px; line-height: 1.5; color: #3a2000; font-weight: 500; }
+.sun-panel .sp-plans { display: flex; gap: 8px; justify-content: center; margin: 14px 0 18px; }
+.sun-panel .sp-plans span {
+  font-size: 10.5px; font-weight: 800; padding: 4px 10px; border-radius: 999px;
+  background: rgba(42, 22, 0, 0.82); color: #ffe7a3; letter-spacing: 0.04em;
+}
+.sun-panel .sp-actions { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.sun-panel .sp-actions .btn { padding: 10px 16px; font-size: 13.5px; width: 100%; }
+.sun-panel .sp-actions .btn-dark {
+  background: #241200; color: #ffe7a3; border-color: #241200;
+  box-shadow: 0 10px 20px -10px rgba(36, 18, 0, 0.9);
+}
+.sun-panel .sp-actions .btn-dark:hover { background: #3a1e00; }
+.sun-panel .sp-close {
+  position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid rgba(42, 22, 0, 0.4); background: rgba(42, 22, 0, 0.12); color: #2a1600;
+  font-size: 16px; cursor: pointer; display: grid; place-items: center;
+}
+.sun-panel .sp-close:hover { background: rgba(42, 22, 0, 0.3); }
+.sun-panel .sp-hint { font-size: 9.5px; color: #5a3200; margin-top: 12px; letter-spacing: 0.06em; opacity: 0.85; }
+
+.sun-exit {
+  position: absolute; z-index: 7; top: clamp(4.5rem, 9vh, 6rem); right: clamp(1rem, 3vw, 2.5rem);
+  opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s;
+}
+.universe.sun-focus .sun-exit { opacity: 1; visibility: visible; }
+
+/* Fallback sin WebGL */
+.universe.no-webgl #universe-canvas,
+.universe.no-webgl .u-overlay,
+.universe.no-webgl .universe-hint { display: none; }
+.universe-fallback { display: none; }
+.universe.no-webgl { height: auto; min-height: 0; padding: 7rem 1.5rem 2rem; }
+.universe.no-webgl .universe-title { position: static; transform: none; }
+.universe.no-webgl .universe-fallback {
+  display: block; text-align: center; color: var(--text-muted); margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+  .u-label .name { font-size: 0.85rem; }
+  .u-label .meta { font-size: 0.66rem; }
+  .u-sat .chip { font-size: 0.58rem; }
+  .universe-hint span { font-size: 0.72rem; padding: 0.32rem 0.7rem; }
+  .universe-hint .desk { display: none; }
+}
+@media (hover: hover) {
+  .universe-hint .touch { display: none; }
+}
+@media (hover: none) {
+  .universe-hint .desk { display: none; }
+}
