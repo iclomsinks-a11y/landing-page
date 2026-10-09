@@ -37,6 +37,8 @@
     <nav class="header-nav" aria-label="Navegación principal">
       <a href="#universo" class="nav-link" id="nav-universo">El Universo</a>
       <a href="#planes" class="nav-link" id="nav-planes">Planes</a>
+      <a href="https://gestarian-clientes.web.app" target="_blank" class="nav-link" id="nav-portal-clientes" style="color: #38bdf8; font-weight: 600;">🛰️ Portal Clientes</a>
+      <button id="btn-download-app" class="btn btn-sm" onclick="openDownloadModal()" style="border-color: rgba(124, 147, 255, 0.4); color: #c4d0ff;">📲 Instalar App</button>
 
       <div id="user-badge" class="user-profile-badge">
         <div id="user-avatar" class="user-avatar">U</div>
@@ -64,6 +66,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
         </a>
         <button class="btn" id="hero-start-free" onclick="handlePlanAccess('lite')">Empieza gratis con Lite</button>
+        <button class="btn" id="hero-install" onclick="openDownloadModal()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); display: inline-flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Instalar App Local (PWA)
+        </button>
       </div>
 
       <a href="#universo" class="scroll-cue" aria-label="Ir al Universo GESTARIAN"><span class="mouse"></span>Desliza</a>
@@ -134,25 +140,24 @@
       <div class="sun-compare">
         <div class="sun-col" style="--pc: var(--c-pro)">
           <h3>Pro</h3>
-          <div class="price">59 €/año · hasta 50 empleados</div>
+          <div class="price">49 €/año · Empleados, Fiscal y Clientes</div>
           <ul>
-            <li>IA + OCR + BD ilimitada</li>
-            <li>Presupuestos, Agenda y avisos fiscales</li>
-            <li>Portal de Cliente por invitación</li>
-            <li>Informes automáticos a gestoría</li>
-            <li>Experiencia audiovisual del vehículo</li>
+            <li>Todo Quick + BD Clientes y Proveedores</li>
+            <li>Página de Empleados: nóminas, puestos, CNAE y control horario 160h/80h (toggle on/off)</li>
+            <li>Informes trimestrales gestoría (Mod. 303, 111, 115, 390 cumplimentados)</li>
+            <li>Ficheros oficiales contabilidad A3, Sage, XLS y CSV</li>
+            <li>Portal de Clientes por invitación con seguimiento en tiempo real</li>
           </ul>
           <button class="btn btn-primary btn-sm" id="sun-modal-pro" onclick="closeModal('modal-sun'); openPlanDetails('pro')">Ver Pro</button>
         </div>
         <div class="sun-col" style="--pc: var(--c-ent)">
-          <h3>Enterprise <small style="font-size:.7rem;color:var(--c-gold);vertical-align:middle">PRÓXIMAMENTE</small></h3>
-          <div class="price">299 €/año · hasta 100 empleados</div>
+          <h3>Enterprise</h3>
+          <div class="price">299 €/año · Sede AEAT y Red Interempresas</div>
           <ul>
-            <li>Red empresarial interconectada</li>
-            <li>Vinculación AEAT con certificado digital</li>
-            <li>Órdenes de trabajo y pedidos en red</li>
-            <li>Cobertura total: derivación por agenda</li>
-            <li>Más de 100 empleados: consultar</li>
+            <li>Conexión directa telemática con la Sede AEAT con certificado digital</li>
+            <li>Red Interempresas B2B para reparto de pedidos de bienes y servicios</li>
+            <li>Comisión automática del 5% por defecto para desvíos con éxito</li>
+            <li>Todas las prestaciones Pro sin limitación</li>
           </ul>
           <button class="btn btn-sm" id="sun-modal-ent" onclick="closeModal('modal-sun'); openPlanDetails('enterprise')">Ver Enterprise</button>
         </div>
@@ -241,6 +246,43 @@
     </div>
   </div>
 
+    <!-- MODAL: Descarga e Instalación App Local -->
+  <div id="modal-download" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Instalar GESTARIAN en tu Dispositivo">
+    <div class="modal-container" style="max-width: 580px;">
+      <button class="modal-close" onclick="closeModal('modal-download')" aria-label="Cerrar">&times;</button>
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div style="width: 56px; height: 56px; margin: 0 auto 1rem; border-radius: 14px; background: rgba(124, 147, 255, 0.15); display: flex; align-items: center; justify-content: center; color: #7c93ff; border: 1px solid rgba(124, 147, 255, 0.3);">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        </div>
+        <h2 style="font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff;">Instalar GESTARIAN en tu Dispositivo</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Usa tu versión de GESTARIAN directamente desde tu escritorio o teléfono móvil, con acceso sin conexión y sin necesidad de abrir la web.</p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 600; color: #7c93ff; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span>💻</span> En Ordenador (Windows / Mac / Linux · Chrome & Edge):
+        </h4>
+        <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 0.8rem;">Haz clic en el botón de abajo para abrir la suite y luego pulsa en el botón <strong>⊕ Instalar</strong> que aparece en la barra de direcciones de tu navegador.</p>
+        <a href="https://gestarian-site.web.app" target="_blank" class="btn btn-primary btn-sm" style="width: 100%; text-align: center; justify-content: center;">
+          Abrir Suite e Instalar como Aplicación
+        </a>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span>📱</span> En Móvil o Tablet (Android / iOS):
+        </h4>
+        <p style="font-size: 0.88rem; color: #cbd5e1; margin: 0;">En iPhone/iPad (Safari) pulsa el botón <strong>Compartir ⎋</strong> → <strong>"Añadir a pantalla de inicio"</strong>. En Android (Chrome) pulsa el menú de 3 puntos ⋮ → <strong>"Instalar aplicación"</strong>.</p>
+      </div>
+
+      <div style="text-align: center; padding-top: 0.5rem;">
+        <a href="gestarian-site.zip" download="gestarian-site.zip" class="btn btn-sm" style="background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; font-size: 0.82rem;">
+          📦 Descargar paquete ZIP para instalación local
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="site-footer">
     <div>
@@ -250,6 +292,8 @@
     <div class="footer-links">
       <a href="#universo" id="footer-universo">El Universo</a>
       <a href="#planes" id="footer-planes">Planes y Precios</a>
+      <a href="https://gestarian-clientes.web.app" target="_blank" id="footer-portal" style="color: #38bdf8;">🛰️ Portal Clientes</a>
+      <a href="javascript:void(0)" onclick="openDownloadModal()" id="footer-install" style="color: #7c93ff;">📲 Instalar App</a>
       <a href="javascript:void(0)" id="footer-login" onclick="openAuthModal('login')">Iniciar Sesión</a>
     </div>
   </footer>

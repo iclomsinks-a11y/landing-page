@@ -17,19 +17,26 @@ if (window.supabase && typeof window.supabase.createClient === 'function') {
   }
 }
 
+// Suite Unificada GESTARIAN-SITE y Portal de Clientes
+const GESTARIAN_SITE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000'
+  : 'https://gestarian-site.web.app';
+
+const PORTAL_CLIENTES_URL = 'https://gestarian-clientes.web.app';
+
 const PLAN_URLS = {
-  quick: 'https://quick-gestarian.web.app',
-  lite: 'https://lite-gestarian.web.app',
-  pro: 'https://pro-gestarian.web.app',
-  enterprise: 'https://enterprise-gestarian.web.app'
+  lite: GESTARIAN_SITE_URL + "?plan=lite",
+  quick: GESTARIAN_SITE_URL + "?plan=quick",
+  pro: GESTARIAN_SITE_URL + "?plan=pro",
+  enterprise: GESTARIAN_SITE_URL + "?plan=enterprise"
 };
 
-/* ---------- Datos de planes (fuente única para universo, grid y modales) ---------- */
+/* ---------- Datos de planes (Suite Unificada GESTARIAN-SITE) ---------- */
 const PLANS = {
   lite: {
     id: 'lite',
     name: 'Lite',
-    tagline: 'El más básico',
+    tagline: 'Presupuestos y facturas directas',
     price: 'Gratis',
     period: 'para siempre',
     short: 'Gratis para siempre',
@@ -37,94 +44,94 @@ const PLANS = {
     color: '#7c93ff',
     inherits: null,
     features: [
-      'Confección de documentos.',
-      'Envío por WhatsApp y Email.',
-      'Impresión directa.',
-      'Sin base de datos: guardado local en el dispositivo.',
-      'Guardado documental interanual gratis.',
-      'Asistencia total documental.'
+      'Acceso exclusivo a confección de presupuestos y facturas directas (emitidas).',
+      'Guardado instantáneo en dispositivo local sin requerir base de datos.',
+      'Posibilidad de imprimir documentos en PDF estándar de forma inmediata.',
+      'Envío por email tras guardar en el dispositivo local.',
+      'Instalable como aplicación local (PWA) de escritorio o móvil.'
     ],
-    extras: [
-      { label: 'Guardar más de 1 año', price: '19 €/año' }
-    ],
-    notes: [],
-    summary: ['Confección de documentos', 'Envío por WhatsApp y Email', 'Impresión directa', 'Guardado local en el dispositivo']
+    extras: [],
+    notes: ['Ideal para profesionales que buscan máxima sencillez, rapidez y privacidad absoluta.'],
+    summary: ['Presupuestos y facturas directas', 'Guardado en dispositivo local', 'Impresión y envío por email', 'Sin base de datos (Gratis para siempre)']
   },
   quick: {
     id: 'quick',
     name: 'Quick',
-    tagline: 'El siguiente paso',
+    tagline: 'Facturación con base de datos y custodia',
     price: 'Gratis',
-    period: '+ extras opcionales',
+    period: '+ extras anuales',
     short: 'Gratis + extras',
-    limit: 'Solo facturas',
+    limit: 'BD Clientes y Proveedores · 1 año',
     color: '#38bdf8',
     inherits: 'Lite',
     features: [
-      'Base de datos de clientes y proveedores.',
-      'Facturas en un solo click.',
-      'OCR para facturas recibidas (opcional · gratis sin OCR).'
+      'Todo lo incluido en Gestarian Lite.',
+      'Base de datos completa de Clientes y Proveedores.',
+      'Generación de facturas directamente desde la base de datos.',
+      'Guardado y custodia documental garantizada por 1 año.',
+      'Envío por WhatsApp y Email con plantillas profesionales preparadas.'
     ],
     extras: [
-      { label: 'Guardado de más de 1 año', price: '19 €/año' },
-      { label: 'OCR de facturas recibidas', price: '+9,90 €/año' },
-      { label: 'Rastreo automático de facturas por email + aviso en tiempo real', price: '+9,90 €/año' }
+      { label: 'Guardado y custodia fiscal por 4 años de facturas', price: '+10 €/año' },
+      { label: 'Guardado y custodia fiscal por 8 años de facturas', price: '+15 €/año' },
+      { label: 'BD proveedores y organismos emisores + Lectura OCR de facturas por foto + Rastreo y extracción de recibos y facturas en email', price: '+19 €/año' }
     ],
-    notes: ['Solo facturas, NO presupuestos.'],
-    summary: ['Todo lo de Lite', 'BD de clientes y proveedores', 'Facturas en un solo click', 'OCR opcional (+9,90 €/año)']
+    notes: ['Perfecto para autónomos y micropymes que necesitan registro ordenado de clientes y facturas.'],
+    summary: ['Todo lo de Lite', 'Base de datos de Clientes y Proveedores', 'Facturas desde BD guardadas por 1 año', 'Extras custodia 4 u 8 años y OCR + email (+10 a +19 €/año)']
   },
   pro: {
     id: 'pro',
     name: 'Pro',
-    tagline: 'El profesional',
-    price: '59 €',
+    tagline: 'Gestión laboral, fiscal y taller integral',
+    price: '49 €',
     period: '/ año',
-    short: '59 €/año',
-    limit: 'Hasta 50 empleados',
+    short: '49 €/año',
+    limit: 'Empleados, Fiscal y Portal Clientes',
     color: '#a855f7',
     inherits: 'Quick',
     features: [
-      'Gestión de presupuestos.',
-      'Portal de clientes (Área de Clientes con acceso por invitación).',
-      'IA integrada para gestionar.',
-      'Avisos de obligaciones fiscales.',
-      'Generación y envío automático de informes a gestoría, previa confirmación.',
-      'Agenda.',
-      'Experiencia audiovisual: seguimiento visual con imágenes de la evolución del vehículo.'
+      'Todo lo incluido en Gestarian Quick con todos los extras habilitados.',
+      'Página de Empleados: ficha completa, puestos específicos, epígrafe según actividad (CNAE/IAE), salarios, nóminas y permisos.',
+      'Control Horario laboral minimalista: por defecto 160h (jornada completa) y 80h (media jornada), con casilla toggle on/off para activar o desactivar.',
+      'Generación de informes trimestrales a gestoría de gastos, ingresos y de IVA.',
+      'Modelos oficiales cumplimentados en pantalla (Modelo 303, 111, 115 y 390).',
+      'Exportación oficial directa para despachos en ficheros A3, Sage, XLS y CSV.',
+      'Portal de Clientes por invitación con seguimiento de estado en tiempo real.',
+      'Seguimiento fotográfico y evolución audiovisual de reparaciones y proyectos.'
     ],
     extras: [],
-    notes: [],
-    media: { src: 'assets/vehiculo-evolucion.jpg', alt: 'Seguimiento visual de la evolución de la reparación de un vehículo', captions: ['Recepción', 'En proceso', 'Entregado'] },
+    notes: ['La suite completa para talleres mecánicos, servicios técnicos y empresas con empleados.'],
+    media: { src: 'assets/vehiculo-evolucion.jpg', alt: 'Seguimiento visual de la evolución del vehículo en taller', captions: ['Recepción', 'En proceso', 'Entregado'] },
     satellites: [
-      { title: 'Potencia', chip: 'IA · OCR', items: ['IA', 'OCR', 'BD ilimitada', 'Hasta 50 usuarios'] },
-      { title: 'Experiencia', chip: 'Audiovisual', items: ['Experiencia Audiovisual', 'Portal de Cliente', 'Informes', 'Gestoría'], desc: 'Seguimiento visual con imágenes de la evolución del vehículo.', img: 'assets/vehiculo-evolucion.jpg' }
+      { title: 'Laboral & Fiscal', chip: 'Nóminas · Fichajes · A3/Sage', items: ['Empleados y puestos', 'Control horario 160h/80h', 'Informes trimestrales IVA/Gastos', 'Exportación A3, Sage, XLS, CSV'] },
+      { title: 'Portal de Clientes', chip: '🛰️ Área Privada', items: ['Acceso seguro DNI/Email', 'Aprobación presupuestos', 'Evolución de reparaciones', 'Descarga directa facturas'], url: PORTAL_CLIENTES_URL }
     ],
-    summary: ['Todo lo de Quick', 'Presupuestos y Agenda', 'IA integrada + avisos fiscales', 'Portal de clientes e informes a gestoría']
+    summary: ['Todo lo de Quick', 'Página de Empleados, nóminas y control horario (160h/80h)', 'Informes trimestrales gestoría y exportación A3/Sage/XLS/CSV', 'Portal de clientes con seguimiento en tiempo real']
   },
   enterprise: {
     id: 'enterprise',
     name: 'Enterprise',
-    tagline: 'El máximo',
+    tagline: 'Conexión oficial AEAT y Red Interempresas',
     price: '299 €',
     period: '/ año',
     short: '299 €/año',
-    limit: 'Hasta 100 empleados · más: consultar',
+    limit: 'Conexión Sede AEAT + Red B2B',
     color: '#6366f1',
     inherits: 'Pro',
-    status: 'Próximamente',
     features: [
-      'Interconexión de empresas (red empresarial).',
-      'Vinculación directa con la AEAT mediante certificación digital (evita gestoría).',
-      'Órdenes de trabajo y pedidos entre empresas de la red.',
-      'Cobertura total integrada (derivación de clientes por agenda).'
+      'Todo lo incluido en Gestarian Pro.',
+      'Conexión directa telemática con la Sede de la AEAT con certificado digital oficial.',
+      'Conexión interempresas para repartir pedidos de bienes y servicios en red.',
+      'Comisión del 5% por defecto para desvíos finalizados con éxito.',
+      'Asignación y derivación colaborativa de órdenes de trabajo entre empresas asociadas.'
     ],
     extras: [],
-    notes: ['Aún no operativa: disponible próximamente. Para más de 100 empleados, consulta condiciones.'],
+    notes: ['Máxima automatización tributaria y expansión de negocio mediante red empresarial colaborativa.'],
     satellites: [
-      { title: 'Red', chip: 'Red Empresarial', items: ['Red Empresarial', 'Vinculación AEAT', 'Certificación digital', 'Evita gestoría'] },
-      { title: 'Cobertura', chip: 'Cobertura Total', items: ['Cobertura Total', 'Derivación de clientes por agenda', 'Hasta 100 empleados'] }
+      { title: 'Sede AEAT', chip: 'Telemática Oficial', items: ['Conexión telemática AEAT', 'Certificado digital', 'Modelos validados', 'Presentación sin gestoría'] },
+      { title: 'Red Interempresas', chip: 'B2B · 5% Comisión', items: ['Reparto pedidos bienes y servicios', 'Comisión 5% automática', 'Derivación por agenda', 'Red multi-empresa'] }
     ],
-    summary: ['Todo lo de Pro', 'Red empresarial interconectada', 'Vinculación AEAT (evita gestoría)', 'Cobertura total · hasta 100 empleados']
+    summary: ['Todo lo de Pro', 'Conexión telemática oficial Sede AEAT', 'Red interempresas para repartir pedidos de bienes y servicios', 'Comisión del 5% por defecto en desvíos']
   }
 };
 window.GESTARIAN_PLANS = PLANS;
@@ -558,4 +565,13 @@ function showRegistrationSuccessModal(user) {
 
 function redirectToDashboard() {
   window.location.href = PLAN_URLS[selectedPlan] || PLAN_URLS.pro;
+}
+
+/* ---------- Modal de Instalación / Descarga Local ---------- */
+function openDownloadModal() {
+  openModal('modal-download');
+}
+
+function closeDownloadModal() {
+  closeModal('modal-download');
 }
